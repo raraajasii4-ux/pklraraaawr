@@ -1,0 +1,168 @@
+# 🌸 GlowMate
+
+## Your Personal AI Skincare & Wellness Companion
+
+## Executive Summary
+
+GlowMate adalah aplikasi mobile berbasis Artificial Intelligence (AI) yang membantu pengguna menjaga kesehatan kulit sekaligus kesehatan tubuh. Aplikasi ini menyediakan AI Face Scan, Glow Diary, Routine Builder, Sleep Tracker, Meal Tracker, Water Tracker, Healthy Habit Tracker, Reminder, Progress Tracker, dan AI Beauty Coach sehingga pengguna dapat membangun kebiasaan hidup sehat secara konsisten.
+
+---
+
+# Problem Statement
+
+Banyak orang mengalami kesulitan menjaga rutinitas skincare karena lupa menggunakan produk, tidak mengetahui kondisi kulit, memiliki pola tidur yang tidak teratur, kurang minum air putih, serta pola makan yang kurang sehat. Hal tersebut menyebabkan kondisi kulit sulit membaik dan kesehatan tubuh kurang terjaga.
+
+GlowMate hadir sebagai solusi dengan menggabungkan teknologi AI dan wellness tracker dalam satu aplikasi.
+
+---
+
+# Goals
+
+## Business Goals
+
+- Menjadi aplikasi AI skincare dan wellness terbaik.
+- Membantu pengguna membangun kebiasaan hidup sehat.
+- Memberikan pengalaman self-care yang mudah dan menyenangkan.
+
+## User Goals
+
+- Memiliki kulit yang lebih sehat.
+- Konsisten melakukan skincare.
+- Tidur tepat waktu.
+- Minum air sesuai kebutuhan.
+- Menjaga pola makan.
+- Memantau perkembangan kulit.
+
+---
+
+# Target User
+
+- Perempuan usia 15–30 tahun.
+- Pelajar.
+- Mahasiswa.
+- Karyawan.
+- Beauty Enthusiast.
+
+---
+
+# Features
+
+## Dashboard
+
+- Skin Score
+- Today's Progress
+- Reminder
+- Daily Streak
+- Today's Quote
+
+## AI Face Scan
+
+- Scan wajah menggunakan kamera.
+- Mendeteksi jerawat, kulit kering, berminyak, kusam, sensitif, komedo, dan bekas jerawat.
+- Memberikan rekomendasi perawatan.
+
+## Glow Diary
+
+- Diary harian.
+- Mood Tracker.
+- Catatan skincare.
+- Upload foto.
+
+## Routine Builder
+
+- Morning Routine.
+- Night Routine.
+- Checklist skincare.
+
+## Water Tracker
+
+- Target minum air.
+- Reminder otomatis.
+
+## Sleep Tracker
+
+- Jam tidur.
+- Jam bangun.
+- Sleep Score.
+
+## Meal Tracker
+
+- Sarapan.
+- Makan siang.
+- Makan malam.
+- Snack.
+- Rekomendasi makanan sehat.
+
+## Healthy Habit
+
+- Olahraga.
+- Sunscreen.
+- Ganti sarung bantal.
+- Makan buah.
+- Makan sayur.
+- Tidur 8 jam.
+
+## Progress Tracker
+
+- Before After.
+- Timeline foto.
+- Grafik perkembangan.
+
+## AI Beauty Coach
+
+- Tips harian berdasarkan hasil AI Face Scan.
+
+---
+
+# Success Metrics
+
+- Rating aplikasi minimal 4.5/5.
+- 10.000 pengguna dalam 6 bulan.
+- 70% pengguna menyelesaikan rutinitas harian.
+- 60% pengguna aktif setiap minggu.
+- AI memiliki akurasi minimal 85%.
+
+---
+
+# Technology
+
+Frontend:
+
+- Flutter
+
+Backend:
+
+- Laravel
+
+Database:
+
+- MySQL
+
+AI:
+
+- TensorFlow
+- OpenCV
+
+Storage:
+
+- Firebase
+
+Notification:
+
+- Firebase Cloud Messaging
+
+---
+
+# Future Development
+
+- AI Chat Beauty Consultant.
+- Konsultasi dokter kulit.
+- Integrasi smartwatch.
+- Scan produk skincare.
+- Komunitas GlowMate.
+
+---
+
+# Conclusion
+
+GlowMate merupakan aplikasi AI yang membantu pengguna menjaga kesehatan kulit dan tubuh melalui AI Face Scan, Glow Diary, Healthy Habit Tracker, Water Tracker, Sleep Tracker, Meal Tracker, Routine Builder, serta AI Beauty Coach sehingga pengguna dapat membangun gaya hidup sehat secara konsisten.

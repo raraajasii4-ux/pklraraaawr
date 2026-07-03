@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glow Mate</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --rose-50: #fff7fa;
+      --rose-100: #ffe7f0;
+      --rose-200: #f8cddd;
+      --rose-400: #ef7fa6;
+      --rose-500: #d95788;
+      --ink: #362b31;
+      --muted: #78646f;
+      --soft: #f6eef2;
+      --line: #ead9e2;
+      --white: #ffffff;
+      --mint: #dff5ec;
+      --mint-ink: #237159;
+      --blue: #e7f0ff;
+      --blue-ink: #3864a8;
+      --sun: #fff0c8;
+      --sun-ink: #8a6820;
+      --shadow: 0 22px 60px rgba(120, 73, 91, 0.14);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 231, 240, 0.95), transparent 36rem),
+        linear-gradient(135deg, #fffafd 0%, #ffffff 42%, #fff1f6 100%);
+      color: var(--ink);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p { margin: 0; }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 268px minmax(0, 1fr);
+    }
+
+    .auth-screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--white);
+    }
+
+    .auth-visual {
+      position: relative;
+      overflow: hidden;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(rgba(63, 36, 47, 0.36), rgba(63, 36, 47, 0.28)),
+        url("https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1400&q=80") center/cover;
+      color: white;
+    }
+
+    .auth-visual h1 {
+      max-width: 560px;
+      font-size: clamp(42px, 6vw, 78px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--rose-500), var(--rose-200));
+      color: white;
+      box-shadow: 0 12px 28px rgba(217, 87, 136, 0.25);
+      font-weight: 900;
+    }
+
+    .auth-panel {
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .auth-card {
+      width: min(100%, 430px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      color: var(--rose-500);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .auth-card h2, .page-title h1 {
+      margin-top: 8px;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--ink);
+      outline: none;
+      padding: 12px 13px;
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    textarea { min-height: 92px; resize: vertical; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--rose-400);
+      box-shadow: 0 0 0 4px rgba(239, 127, 166, 0.14);
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: var(--radius);
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-weight: 850;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--rose-500); color: white; box-shadow: 0 14px 26px rgba(217, 87, 136, 0.26); }
+    .btn-secondary { background: var(--rose-100); color: #9a335e; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .btn-icon { width: 42px; padding: 0; font-size: 18px; }
+
+    .auth-switch {
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .link-button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--rose-500);
+      font-weight: 850;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      min-height: 44px;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      text-align: left;
+      font-weight: 800;
+    }
+
+    .nav-btn.active {
+      background: var(--rose-100);
+      color: #96365d;
+    }
+
+    .nav-icon {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--soft);
+      border: 1px solid var(--line);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--rose-100);
+      border: 1px solid var(--line);
+      font-size: 24px;
+      overflow: hidden;
+    }
+
+    .avatar.large {
+      width: 84px;
+      height: 84px;
+      font-size: 42px;
+    }
+
+    .view { display: none; animation: appear 220ms ease; }
+    .view.active { display: block; }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(300px, 0.7fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 12px 36px rgba(99, 62, 78, 0.08);
+    }
+
+    .panel.pad { padding: 18px; }
+    .panel + .panel { margin-top: 18px; }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 276px;
+      display: grid;
+      align-content: end;
+      padding: 24px;
+      background:
+        linear-gradient(90deg, rgba(54, 43, 49, 0.78), rgba(54, 43, 49, 0.12)),
+        url("https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=1400&q=80") center/cover;
+      color: white;
+    }
+
+    .hero-panel h2 {
+      max-width: 620px;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .routine-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .routine-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      padding: 12px;
+    }
+
+    .check {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--rose-300, #f2b8ce);
+      background: white;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .routine-item.done .check {
+      background: var(--rose-500);
+      border-color: var(--rose-500);
+    }
+
+    .routine-item.done h3 { text-decoration: line-through; color: var(--muted); }
+
+    .routine-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--rose-100);
+      color: #9a335e;
+    }
+
+    .tag.mint { background: var(--mint); color: var(--mint-ink); }
+    .tag.blue { background: var(--blue); color: var(--blue-ink); }
+    .tag.sun { background: var(--sun); color: var(--sun-ink); }
+
+    .progress-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--soft);
+      margin-top: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--rose-500), var(--rose-200));
+      transition: width 260ms ease;
+    }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .recommendation {
+      min-height: 170px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .recommendation .symbol {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: var(--rose-100);
+      color: var(--rose-500);
+      font-weight: 900;
+    }
+
+    .avatar-picker {
+      display: grid;
+      grid-template-columns: repeat(6, 44px);
+      gap: 8px;
+    }
+
+    .avatar-option {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: white;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+    }
+
+    .avatar-option.active {
+      border-color: var(--rose-500);
+      box-shadow: 0 0 0 4px rgba(217, 87, 136, 0.12);
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      transform: translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      background: var(--ink);
+      color: white;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      transition: opacity 200ms ease, transform 200ms ease;
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu { display: none; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .auth-screen, .app-shell, .layout { grid-template-columns: 1fr; }
+      .auth-visual { min-height: 42vh; }
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 286px;
+        z-index: 15;
+        transform: translateX(-105%);
+        transition: transform 220ms ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .mobile-menu { display: inline-flex; }
+      .main { padding: 18px; }
+      .topbar { align-items: flex-start; }
+    }
+
+    @media (max-width: 680px) {
+      .auth-panel, .auth-visual { padding: 22px; }
+      .auth-card { padding: 20px; }
+      .topbar { flex-direction: column; }
+      .top-actions { width: 100%; justify-content: space-between; }
+      .hero-panel { min-height: 340px; padding: 18px; }
+      .stats, .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .routine-item { grid-template-columns: auto minmax(0, 1fr); }
+      .routine-item .tag:last-child { grid-column: 2; justify-self: start; }
+      .avatar-picker { grid-template-columns: repeat(4, 44px); }
+    }
+  </style>
+</head>
+<body>
+  <div id="authScreen" class="auth-screen">
+    <section class="auth-visual" aria-label="Glow Mate preview">
+      <div class="brand-mark"><span class="logo">GM</span><span>Glow Mate</span></div>
+      <div>
+        <p class="eyebrow" style="color:#ffe7f0;">Personal care companion</p>
+        <h1>Rutinitas cantik yang rapi, personal, dan terasa ringan.</h1>
+      </div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-card">
+        <p class="eyebrow" id="authEyebrow">Selamat datang</p>
+        <h2 id="authTitle">Masuk ke Glow Mate</h2>
+        <p class="muted" style="margin-top:10px;">Kelola perawatan wajah dan tubuh harian dari satu tempat yang tenang dan mudah dipakai.</p>
+        <form class="form-grid" id="authForm">
+          <label>Username
+            <input id="authUsername" autocomplete="username" placeholder="contoh: mahera" required />
+          </label>
+          <label>Password
+            <input id="authPassword" type="password" autocomplete="current-password" placeholder="Minimal 6 karakter" required />
+          </label>
+          <button class="btn btn-primary" type="submit" id="authSubmit">Masuk</button>
+        </form>
+        <div class="auth-switch">
+          <span id="authHint">Belum punya akun?</span>
+          <button class="link-button" id="toggleAuth" type="button">Daftar sekarang</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="appShell" class="app-shell hidden">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-mark"><span class="logo">GM</span><span>Glow Mate</span></div>
+      <nav class="nav" aria-label="Menu utama">
+        <button class="nav-btn active" data-view="dashboard"><span class="nav-icon">H</span>Home</button>
+        <button class="nav-btn" data-view="routines"><span class="nav-icon">R</span>Routines</button>
+        <button class="nav-btn" data-view="recommendations"><span class="nav-icon">G</span>Glow Plan</button>
+        <button class="nav-btn" data-view="profile"><span class="nav-icon">P</span>Profile</button>
+        <button class="nav-btn" data-view="settings"><span class="nav-icon">S</span>Settings</button>
+      </nav>
+      <div class="sidebar-footer">
+        <strong id="streakText">0 hari konsisten</strong>
+        <p class="muted" style="font-size:13px; margin-top:6px;">Selesaikan minimal 4 langkah hari ini untuk menjaga streak.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <p class="eyebrow" id="pageEyebrow">Dashboard</p>
+          <h1 id="pageTitle">Halo, Glow Mate</h1>
+        </div>
+        <div class="top-actions">
+          <button class="btn btn-ghost btn-icon mobile-menu" id="menuBtn" type="button" aria-label="Buka menu">=</button>
+          <button class="btn btn-secondary" id="quickRoutineBtn" type="button">Mulai rutin</button>
+          <div class="avatar" id="topAvatar">S</div>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboard">
+        <div class="layout">
+          <div>
+            <section class="panel hero-panel">
+              <p class="eyebrow" style="color:#ffe7f0;">Today glow plan</p>
+              <h2 id="heroGreeting">Rawat kulitmu dengan alur yang sudah disiapkan.</h2>
+              <div class="hero-actions">
+                <button class="btn btn-primary" id="heroStartBtn" type="button">Mulai langkah berikutnya</button>
+                <button class="btn btn-secondary" data-view-link="recommendations" type="button">Lihat rekomendasi</button>
+              </div>
+            </section>
+
+            <div class="stats">
+              <div class="stat"><strong id="progressNumber">0%</strong><span class="muted">Progress hari ini</span></div>
+              <div class="stat"><strong id="completedNumber">0/0</strong><span class="muted">Langkah selesai</span></div>
+              <div class="stat"><strong id="reminderNumber">07:30</strong><span class="muted">Reminder aktif</span></div>
+            </div>
+
+            <section class="panel pad">
+              <div class="section-head">
+                <div>
+                  <h2>Rutinitas hari ini</h2>
+                  <p class="muted">Checklist perawatan wajah dan tubuh yang paling relevan untuk profilmu.</p>
+                </div>
+                <button class="btn btn-ghost" id="resetDayBtn" type="button">Reset</button>
+              </div>
+              <div class="routine-list" id="todayList"></div>
+            </section>
+          </div>
+
+          <aside>
+            <section class="panel pad">
+              <div class="section-head">
+                <h2>Profil cepat</h2>
+                <div class="avatar" id="sideAvatar">S</div>
+              </div>
+              <div class="routine-meta" id="profileTags"></div>
+              <div class="progress-track"><div class="progress-fill" id="profileProgress"></div></div>
+              <p class="muted" style="margin-top:10px;" id="profileCompleteness">Lengkapi profil untuk rekomendasi lebih akurat.</p>
+            </section>
+
+            <section class="panel pad">
+              <div class="section-head">
+                <h2>Catatan hasil</h2>
+                <span class="tag mint" id="noteDate">Hari ini</span>
+              </div>
+              <textarea id="dailyNote" placeholder="Contoh: sunscreen terasa nyaman, kulit lebih lembap..."></textarea>
+              <button class="btn btn-primary" style="width:100%; margin-top:10px;" id="saveNoteBtn" type="button">Simpan catatan</button>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="routines">
+        <section class="panel pad">
+          <div class="section-head">
+            <div>
+              <h2>Routine Center</h2>
+              <p class="muted">Semua langkah MVP: wajah pagi, wajah malam, dan body care.</p>
+            </div>
+            <button class="btn btn-primary" id="completeAllBtn" type="button">Selesaikan semua</button>
+          </div>
+          <div class="routine-list" id="routineCenterList"></div>
+        </section>
+      </section>
+
+      <section class="view" id="recommendations">
+        <section class="panel pad">
+          <div class="section-head">
+            <div>
+              <h2>Glow Plan personal</h2>
+              <p class="muted">Rekomendasi berubah berdasarkan tipe kulit, masalah kulit, kebutuhan tubuh, dan preferensi.</p>
+            </div>
+            <button class="btn btn-secondary" data-view-link="profile" type="button">Edit profil</button>
+          </div>
+          <div class="grid-3" id="recommendationGrid"></div>
+        </section>
+      </section>
+
+      <section class="view" id="profile">
+        <div class="layout">
+          <section class="panel pad">
+            <div class="section-head">
+              <div>
+                <h2>Profil pengguna</h2>
+                <p class="muted">Data ini dipakai untuk menyesuaikan rutinitas Glow Mate.</p>
+              </div>
+              <div class="avatar large" id="profileAvatar">S</div>
+            </div>
+            <form class="form-grid" id="profileForm">
+              <div class="grid-2">
+                <label>Usia
+                  <input id="ageInput" type="number" min="13" max="80" placeholder="24" />
+                </label>
+                <label>Tipe kulit
+                  <select id="skinTypeInput">
+                    <option value="">Pilih tipe kulit</option>
+                    <option>Normal</option>
+                    <option>Kering</option>
+                    <option>Berminyak</option>
+                    <option>Kombinasi</option>
+                    <option>Sensitif</option>
+                  </select>
+                </label>
+              </div>
+              <div class="grid-2">
+                <label>Masalah kulit utama
+                  <select id="skinConcernInput">
+                    <option value="">Pilih masalah</option>
+                    <option>Jerawat</option>
+                    <option>Kusam</option>
+                    <option>Kering</option>
+                    <option>Bekas jerawat</option>
+                    <option>Pori terlihat</option>
+                  </select>
+                </label>
+                <label>Kebutuhan tubuh
+                  <select id="bodyNeedInput">
+                    <option value="">Pilih kebutuhan</option>
+                    <option>Kulit lembap</option>
+                    <option>Body brightening</option>
+                    <option>Perawatan aroma</option>
+                    <option>Kulit halus</option>
+                  </select>
+                </label>
+              </div>
+              <label>Preferensi perawatan
+                <select id="preferenceInput">
+                  <option value="">Pilih preferensi</option>
+                  <option>Minimalis</option>
+                  <option>Lengkap</option>
+                  <option>Sensitif-friendly</option>
+                  <option>Budget-friendly</option>
+                </select>
+              </label>
+              <button class="btn btn-primary" type="submit">Simpan profil</button>
+            </form>
+          </section>
+
+          <aside>
+            <section class="panel pad">
+              <h2>Avatar buah</h2>
+              <p class="muted" style="margin:6px 0 14px;">Pilih avatar lucu untuk membuat profil terasa lebih personal.</p>
+              <div class="avatar-picker" id="avatarPicker"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="settings">
+        <div class="grid-2">
+          <section class="panel pad">
+            <h2>Akun</h2>
+            <form class="form-grid" id="accountForm">
+              <label>Username baru
+                <input id="usernameInput" autocomplete="username" />
+              </label>
+              <label>Password baru
+                <input id="passwordInput" type="password" autocomplete="new-password" placeholder="Kosongkan jika tidak diganti" />
+              </label>
+              <button class="btn btn-primary" type="submit">Perbarui akun</button>
+            </form>
+          </section>
+
+          <section class="panel pad">
+            <h2>Pengingat rutin</h2>
+            <form class="form-grid" id="reminderForm">
+              <label>Waktu pengingat pagi
+                <input id="morningReminderInput" type="time" />
+              </label>
+              <label>Waktu pengingat malam
+                <input id="nightReminderInput" type="time" />
+              </label>
+              <button class="btn btn-primary" type="submit">Simpan reminder</button>
+            </form>
+            <button class="btn btn-ghost" style="width:100%; margin-top:14px;" id="logoutBtn" type="button">Keluar</button>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const storeKey = "glowMateApp.v1";
+    const avatars = ["🍓", "🥑", "🍈", "🥝", "🍑", "🫐"];
+    const avatarFaces = {
+      "🍓": "Strawberry",
+      "🥑": "Avocado",
+      "🍈": "Melon",
+      "🥝": "Kiwi",
+      "🍑": "Peach",
+      "🫐": "Berry",
+      S: "Strawberry",
+      A: "Avocado",
+      M: "Melon",
+      K: "Kiwi",
+      P: "Peach",
+      B: "Berry"
+    };
+
+    const defaultState = {
+      mode: "login",
+      session: null,
+      users: {},
+      activeView: "dashboard"
+    };
+
+    const baseProfile = {
+      age: "",
+      skinType: "",
+      skinConcern: "",
+      bodyNeed: "",
+      preference: "",
+      avatar: "🍓",
+      reminders: { morning: "07:30", night: "21:00" },
+      note: "",
+      streak: 0,
+      completed: {}
+    };
+
+    const routineTemplates = [
+      { id: "cleanse-am", title: "Gentle cleanser", time: "Pagi", area: "Wajah", mins: 2, tag: "Wajib" },
+      { id: "hydrate-am", title: "Hydrating toner atau essence", time: "Pagi", area: "Wajah", mins: 2, tag: "Personal" },
+      { id: "moisturizer-am", title: "Pelembap sesuai tipe kulit", time: "Pagi", area: "Wajah", mins: 2, tag: "Wajib" },
+      { id: "sunscreen", title: "Sunscreen SPF 30+", time: "Pagi", area: "Wajah", mins: 1, tag: "Wajib" },
+      { id: "body-lotion", title: "Body lotion setelah mandi", time: "Pagi", area: "Tubuh", mins: 2, tag: "Body" },
+      { id: "cleanse-pm", title: "Double cleanse ringan", time: "Malam", area: "Wajah", mins: 3, tag: "Wajib" },
+      { id: "treatment-pm", title: "Treatment fokus masalah kulit", time: "Malam", area: "Wajah", mins: 3, tag: "Personal" },
+      { id: "body-care-pm", title: "Body care sebelum tidur", time: "Malam", area: "Tubuh", mins: 2, tag: "Body" }
+    ];
+
+    let state = loadState();
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    function clone(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storeKey)) || {};
+        return normalizeState({ ...clone(defaultState), ...saved });
+      } catch {
+        return clone(defaultState);
+      }
+    }
+
+    function normalizeState(nextState) {
+      Object.keys(nextState.users || {}).forEach((username) => {
+        const user = nextState.users[username];
+        user.profile = { ...clone(baseProfile), ...(user.profile || {}) };
+        const oldAvatarMap = { S: "🍓", A: "🥑", M: "🍈", K: "🥝", P: "🍑", B: "🫐" };
+        user.profile.avatar = oldAvatarMap[user.profile.avatar] || user.profile.avatar || "🍓";
+        user.profile.reminders = { ...baseProfile.reminders, ...(user.profile.reminders || {}) };
+        user.profile.completed ||= {};
+      });
+      return nextState;
+    }
+
+    function saveState() {
+      localStorage.setItem(storeKey, JSON.stringify(state));
+    }
+
+    function hashPassword(value) {
+      let hash = 5381;
+      for (let i = 0; i < value.length; i += 1) hash = ((hash << 5) + hash) + value.charCodeAt(i);
+      return String(hash >>> 0);
+    }
+
+    function currentUser() {
+      return state.session ? state.users[state.session] : null;
+    }
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function toast(message) {
+      const el = $("#toast");
+      el.textContent = message;
+      el.classList.add("show");
+      window.clearTimeout(toast.timer);
+      toast.timer = window.setTimeout(() => el.classList.remove("show"), 2400);
+    }
+
+    function setAuthMode(mode) {
+      state.mode = mode;
+      $("#authEyebrow").textContent = mode === "login" ? "Selamat datang" : "Buat akun";
+      $("#authTitle").textContent = mode === "login" ? "Masuk ke Glow Mate" : "Daftar Glow Mate";
+      $("#authSubmit").textContent = mode === "login" ? "Masuk" : "Buat akun";
+      $("#authHint").textContent = mode === "login" ? "Belum punya akun?" : "Sudah punya akun?";
+      $("#toggleAuth").textContent = mode === "login" ? "Daftar sekarang" : "Masuk";
+      saveState();
+    }
+
+    function renderShell() {
+      const signedIn = Boolean(state.session && state.users[state.session]);
+      $("#authScreen").classList.toggle("hidden", signedIn);
+      $("#appShell").classList.toggle("hidden", !signedIn);
+      if (signedIn) renderApp();
+    }
+
+    function renderApp() {
+      const user = currentUser();
+      const profile = user.profile;
+      const displayName = user.username;
+      $("#pageTitle").textContent = `Halo, ${displayName}`;
+      $("#heroGreeting").textContent = `Hari ini fokus pada kulit ${profile.skinType || "seimbang"} dan rutinitas yang mudah diikuti.`;
+      setAvatarText("#topAvatar", profile.avatar);
+      setAvatarText("#sideAvatar", profile.avatar);
+      setAvatarText("#profileAvatar", profile.avatar);
+      $("#streakText").textContent = `${profile.streak || 0} hari konsisten`;
+      $("#dailyNote").value = profile.note || "";
+      $("#usernameInput").value = user.username;
+      $("#morningReminderInput").value = profile.reminders.morning;
+      $("#nightReminderInput").value = profile.reminders.night;
+      $("#reminderNumber").textContent = profile.reminders.morning;
+      fillProfileForm(profile);
+      renderNavigation();
+      renderRoutines();
+      renderRecommendations();
+      renderProfileTags();
+      renderAvatarPicker();
+      setActiveView(state.activeView || "dashboard");
+    }
+
+    function setAvatarText(selector, value) {
+      const el = $(selector);
+      el.textContent = value || "🍓";
+      el.title = avatarFaces[value] || "Strawberry";
+    }
+
+    function fillProfileForm(profile) {
+      $("#ageInput").value = profile.age || "";
+      $("#skinTypeInput").value = profile.skinType || "";
+      $("#skinConcernInput").value = profile.skinConcern || "";
+      $("#bodyNeedInput").value = profile.bodyNeed || "";
+      $("#preferenceInput").value = profile.preference || "";
+    }
+
+    function getCompletedMap() {
+      const user = currentUser();
+      const key = todayKey();
+      user.profile.completed[key] ||= {};
+      return user.profile.completed[key];
+    }
+
+    function completionStats() {
+      const completed = getCompletedMap();
+      const done = routineTemplates.filter((item) => completed[item.id]).length;
+      const total = routineTemplates.length;
+      return { done, total, percent: Math.round((done / total) * 100) };
+    }
+
+    function renderRoutines() {
+      const completed = getCompletedMap();
+      const stats = completionStats();
+      $("#progressNumber").textContent = `${stats.percent}%`;
+      $("#completedNumber").textContent = `${stats.done}/${stats.total}`;
+      $("#profileProgress").style.width = `${profileScore()}%`;
+      $("#profileCompleteness").textContent = profileScore() === 100 ? "Profil lengkap. Rekomendasi sudah dipersonalisasi." : "Lengkapi profil untuk rekomendasi lebih akurat.";
+      renderRoutineList($("#todayList"), completed);
+      renderRoutineList($("#routineCenterList"), completed);
+    }
+
+    function renderRoutineList(container, completed) {
+      container.innerHTML = routineTemplates.map((item) => `
+        <button class="routine-item ${completed[item.id] ? "done" : ""}" data-routine="${item.id}" type="button">
+          <span class="check">${completed[item.id] ? "✓" : ""}</span>
+          <span>
+            <h3>${item.title}</h3>
+            <span class="routine-meta">
+              <span class="tag ${item.time === "Malam" ? "blue" : "sun"}">${item.time}</span>
+              <span class="tag mint">${item.area}</span>
+              <span class="tag">${item.mins} menit</span>
+            </span>
+          </span>
+          <span class="tag">${item.tag}</span>
+        </button>
+      `).join("");
+
+      container.querySelectorAll("[data-routine]").forEach((button) => {
+        button.addEventListener("click", () => toggleRoutine(button.dataset.routine));
+      });
+    }
+
+    function renderRecommendations() {
+      const profile = currentUser().profile;
+      const concern = profile.skinConcern || "keseimbangan kulit";
+      const type = profile.skinType || "Normal";
+      const preference = profile.preference || "Minimalis";
+      const body = profile.bodyNeed || "Kulit lembap";
+      const cards = [
+        {
+          symbol: "AM",
+          title: "Pagi yang protektif",
+          text: `Untuk kulit ${type.toLowerCase()}, gunakan cleanser lembut, pelembap ringan, lalu sunscreen. Ini jadi dasar paling aman untuk konsistensi harian.`
+        },
+        {
+          symbol: "PM",
+          title: `Fokus ${concern.toLowerCase()}`,
+          text: `Malam hari cocok untuk treatment bertahap. Mulai 2-3 kali seminggu agar kulit punya waktu beradaptasi.`
+        },
+        {
+          symbol: "BD",
+          title: body,
+          text: `Body care dibuat praktis: lotion setelah mandi, eksfoliasi lembut mingguan, dan aroma yang membuat rutinitas terasa nyaman.`
+        },
+        {
+          symbol: "RX",
+          title: `Gaya ${preference.toLowerCase()}`,
+          text: preference === "Lengkap" ? "Tambahkan serum, masker mingguan, dan tracking hasil." : "Pertahankan langkah inti agar tidak terasa berat."
+        },
+        {
+          symbol: "NT",
+          title: "Reminder realistis",
+          text: `Glow Mate akan mengingatkan pukul ${profile.reminders.morning} dan ${profile.reminders.night}, sesuai waktu yang kamu atur.`
+        },
+        {
+          symbol: "SC",
+          title: "Safety note",
+          text: "Patch test produk baru dan hentikan jika muncul iritasi. Untuk kondisi berat, konsultasikan dengan profesional kesehatan kulit."
+        }
+      ];
+
+      $("#recommendationGrid").innerHTML = cards.map((card) => `
+        <article class="recommendation">
+          <div class="symbol">${card.symbol}</div>
+          <h3>${card.title}</h3>
+          <p class="muted">${card.text}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderProfileTags() {
+      const profile = currentUser().profile;
+      const values = [
+        profile.age ? `${profile.age} tahun` : "Usia belum diisi",
+        profile.skinType || "Tipe kulit belum diisi",
+        profile.skinConcern || "Concern belum diisi",
+        profile.preference || "Preferensi belum diisi"
+      ];
+      $("#profileTags").innerHTML = values.map((value, index) => `<span class="tag ${index % 2 ? "mint" : ""}">${value}</span>`).join("");
+    }
+
+    function renderAvatarPicker() {
+      const active = currentUser().profile.avatar;
+      $("#avatarPicker").innerHTML = avatars.map((avatar) => `
+        <button class="avatar-option ${avatar === active ? "active" : ""}" data-avatar="${avatar}" title="${avatarFaces[avatar]}" type="button">${avatar}</button>
+      `).join("");
+      $("#avatarPicker").querySelectorAll("[data-avatar]").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentUser().profile.avatar = button.dataset.avatar;
+          saveState();
+          renderApp();
+          toast("Avatar profil diperbarui.");
+        });
+      });
+    }
+
+    function renderNavigation() {
+      $$(".nav-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.view === state.activeView);
+      });
+    }
+
+    function profileScore() {
+      const profile = currentUser().profile;
+      const fields = ["age", "skinType", "skinConcern", "bodyNeed", "preference"];
+      const filled = fields.filter((field) => Boolean(profile[field])).length;
+      return Math.round((filled / fields.length) * 100);
+    }
+
+    function setActiveView(view) {
+      state.activeView = view;
+      $$(".view").forEach((section) => section.classList.toggle("active", section.id === view));
+      $$(".nav-btn").forEach((button) => button.classList.toggle("active", button.dataset.view === view));
+      const titles = {
+        dashboard: ["Dashboard", "Halo, " + currentUser().username],
+        routines: ["Routine Center", "Kelola rutinitas"],
+        recommendations: ["Glow Plan", "Rekomendasi personal"],
+        profile: ["Profile", "Kenali kebutuhanmu"],
+        settings: ["Settings", "Akun dan reminder"]
+      };
+      $("#pageEyebrow").textContent = titles[view][0];
+      $("#pageTitle").textContent = titles[view][1];
+      $("#sidebar").classList.remove("open");
+      saveState();
+    }
+
+    function toggleRoutine(id) {
+      const completed = getCompletedMap();
+      completed[id] = !completed[id];
+      const stats = completionStats();
+      if (stats.done >= 4) currentUser().profile.streak = Math.max(currentUser().profile.streak || 0, 1);
+      saveState();
+      renderApp();
+      toast(completed[id] ? "Langkah ditandai selesai." : "Langkah dikembalikan.");
+    }
+
+    function startNextRoutine() {
+      const completed = getCompletedMap();
+      const next = routineTemplates.find((item) => !completed[item.id]);
+      if (!next) {
+        toast("Semua rutinitas hari ini sudah selesai.");
+        return;
+      }
+      toggleRoutine(next.id);
+    }
+
+    $("#toggleAuth").addEventListener("click", () => setAuthMode(state.mode === "login" ? "register" : "login"));
+
+    $("#authForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const username = $("#authUsername").value.trim();
+      const password = $("#authPassword").value;
+      if (password.length < 6) {
+        toast("Password minimal 6 karakter.");
+        return;
+      }
+      if (state.mode === "register") {
+        if (state.users[username]) {
+          toast("Username sudah terdaftar.");
+          return;
+        }
+        state.users[username] = { username, passwordHash: hashPassword(password), profile: clone(baseProfile) };
+        state.session = username;
+        state.activeView = "profile";
+        saveState();
+        $("#authForm").reset();
+        renderShell();
+        toast("Akun dibuat. Lengkapi profil dulu.");
+        return;
+      }
+      const user = state.users[username];
+      if (!user || user.passwordHash !== hashPassword(password)) {
+        toast("Username atau password tidak cocok.");
+        return;
+      }
+      state.session = username;
+      state.activeView = "dashboard";
+      saveState();
+      $("#authForm").reset();
+      renderShell();
+      toast("Berhasil masuk.");
+    });
+
+    $$(".nav-btn").forEach((button) => button.addEventListener("click", () => setActiveView(button.dataset.view)));
+    $$("[data-view-link]").forEach((button) => button.addEventListener("click", () => setActiveView(button.dataset.viewLink)));
+    $("#menuBtn").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+    $("#quickRoutineBtn").addEventListener("click", startNextRoutine);
+    $("#heroStartBtn").addEventListener("click", startNextRoutine);
+    $("#resetDayBtn").addEventListener("click", () => {
+      currentUser().profile.completed[todayKey()] = {};
+      saveState();
+      renderApp();
+      toast("Progress hari ini direset.");
+    });
+    $("#completeAllBtn").addEventListener("click", () => {
+      const completed = getCompletedMap();
+      routineTemplates.forEach((item) => { completed[item.id] = true; });
+      currentUser().profile.streak = Math.max(currentUser().profile.streak || 0, 1);
+      saveState();
+      renderApp();
+      toast("Semua langkah hari ini selesai.");
+    });
+    $("#saveNoteBtn").addEventListener("click", () => {
+      currentUser().profile.note = $("#dailyNote").value.trim();
+      saveState();
+      toast("Catatan hasil disimpan.");
+    });
+    $("#profileForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      Object.assign(currentUser().profile, {
+        age: $("#ageInput").value,
+        skinType: $("#skinTypeInput").value,
+        skinConcern: $("#skinConcernInput").value,
+        bodyNeed: $("#bodyNeedInput").value,
+        preference: $("#preferenceInput").value
+      });
+      saveState();
+      renderApp();
+      toast("Profil berhasil disimpan.");
+    });
+    $("#accountForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const user = currentUser();
+      const nextUsername = $("#usernameInput").value.trim();
+      const nextPassword = $("#passwordInput").value;
+      if (!nextUsername) {
+        toast("Username tidak boleh kosong.");
+        return;
+      }
+      if (nextUsername !== user.username && state.users[nextUsername]) {
+        toast("Username baru sudah dipakai.");
+        return;
+      }
+      if (nextPassword && nextPassword.length < 6) {
+        toast("Password baru minimal 6 karakter.");
+        return;
+      }
+      if (nextPassword) user.passwordHash = hashPassword(nextPassword);
+      if (nextUsername !== user.username) {
+        delete state.users[user.username];
+        user.username = nextUsername;
+        state.users[nextUsername] = user;
+        state.session = nextUsername;
+      }
+      $("#passwordInput").value = "";
+      saveState();
+      renderApp();
+      toast("Akun berhasil diperbarui.");
+    });
+    $("#reminderForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      currentUser().profile.reminders = {
+        morning: $("#morningReminderInput").value || "07:30",
+        night: $("#nightReminderInput").value || "21:00"
+      };
+      saveState();
+      renderApp();
+      toast("Reminder disimpan.");
+    });
+    $("#logoutBtn").addEventListener("click", () => {
+      state.session = null;
+      state.activeView = "dashboard";
+      saveState();
+      renderShell();
+      toast("Kamu sudah keluar.");
+    });
+
+    setAuthMode(state.mode || "login");
+    renderShell();
+  </script>
+</body>
+</html>
