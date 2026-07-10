@@ -32,6 +32,12 @@
 
     * { box-sizing: border-box; }
 
+    html {
+      scroll-behavior: smooth;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -40,6 +46,8 @@
         radial-gradient(circle at top left, rgba(255, 231, 240, 0.95), transparent 36rem),
         linear-gradient(135deg, #fffafd 0%, #ffffff 42%, #fff1f6 100%);
       color: var(--ink);
+      max-width: 100%;
+      overflow-x: hidden;
     }
 
     button, input, select, textarea { font: inherit; }
@@ -50,6 +58,37 @@
       min-height: 100vh;
       display: grid;
       grid-template-columns: 268px minmax(0, 1fr);
+    }
+
+    #appShell:not(.hidden) {
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(239, 127, 166, 0.78) rgba(255, 231, 240, 0.48);
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(255, 231, 240, 0.42);
+      border-radius: 999px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(239, 127, 166, 0.86), rgba(248, 205, 221, 0.86));
+      border-radius: 999px;
+      border: 2px solid rgba(255, 250, 253, 0.78);
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(217, 87, 136, 0.88), rgba(239, 127, 166, 0.86));
     }
 
     .auth-screen {
@@ -223,9 +262,13 @@
     }
 
     .sidebar {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      width: 268px;
       height: 100vh;
+      overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 22px;
       border-right: 1px solid var(--line);
       background: rgba(255, 255, 255, 0.82);
@@ -279,6 +322,11 @@
 
     .main {
       min-width: 0;
+      height: 100vh;
+      margin-left: 268px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-behavior: smooth;
       padding: 24px;
     }
 
@@ -667,6 +715,10 @@
       pointer-events: auto;
     }
 
+    .logout-screen.hiding {
+      opacity: 0;
+    }
+
     .logout-card {
       width: min(100%, 720px);
       position: relative;
@@ -675,7 +727,7 @@
       border-radius: 32px;
       padding: 34px;
       text-align: center;
-      background: rgba(255,255,255,0.74);
+      background: rgba(255,255,255,0.88);
       box-shadow: 0 28px 90px rgba(121, 79, 96, 0.18);
       backdrop-filter: blur(20px);
       animation: slideUp 520ms ease both;
@@ -688,10 +740,16 @@
       display: grid;
       place-items: center;
       border-radius: 36px;
-      font-size: 62px;
-      background: linear-gradient(135deg, var(--rose-100), var(--cream), var(--lavender));
+      overflow: hidden;
+      background: white;
       box-shadow: 0 20px 42px rgba(217, 87, 136, 0.16);
-      animation: floatHero 4s ease-in-out infinite;
+      animation: splashLogo 2.2s ease-in-out infinite;
+    }
+
+    .logout-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .logout-card h2 {
@@ -704,6 +762,7 @@
       font-size: 18px;
       font-weight: 900;
       color: #755464;
+      line-height: 1.6;
     }
 
     .logout-summary {
@@ -724,6 +783,21 @@
       border: 1px solid rgba(234,217,226,0.72);
       font-weight: 900;
       color: var(--ink);
+    }
+
+    .logout-credit {
+      margin-top: 24px;
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .logout-divider {
+      color: rgba(217, 87, 136, 0.46);
+      letter-spacing: 0.08em;
+      font-weight: 900;
     }
 
     .floating-sparkles {
@@ -849,6 +923,36 @@
     .sidebar-footer {
       background: linear-gradient(135deg, rgba(255, 231, 240, 0.7), rgba(223, 245, 236, 0.72));
       border-color: rgba(234, 217, 226, 0.72);
+    }
+
+    .developer-card {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+      padding: 16px;
+      border: 1px solid rgba(248, 205, 221, 0.72);
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 231, 240, 0.96), rgba(255, 247, 250, 0.94));
+      box-shadow: 0 16px 42px rgba(217, 87, 136, 0.13);
+      backdrop-filter: blur(18px);
+      transition: transform 260ms ease, box-shadow 260ms ease, background 260ms ease;
+    }
+
+    .developer-card:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, rgba(255, 231, 240, 1), rgba(255, 255, 255, 0.98));
+      box-shadow: 0 22px 56px rgba(217, 87, 136, 0.17);
+    }
+
+    .developer-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: #6f4a5a;
+      font-size: 12px;
+      font-weight: 850;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
     }
 
     .main {
@@ -2419,6 +2523,296 @@
       .face-stats, .face-checklist, .routine-tabs, .skin-condition-grid, .skin-mood-grid, .badge-grid, .logout-summary, .quick-suggestions, .ai-chat-form, .notes-grid, .notes-toolbar { grid-template-columns: 1fr; }
       .home-card { padding: 18px; }
     }
+
+    @media (max-width: 1200px) {
+      .dashboard-home {
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 310px);
+      }
+
+      .face-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 310px);
+      }
+
+      .notes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 992px) {
+      .auth-screen,
+      .app-shell,
+      .layout,
+      .dashboard-home,
+      .home-grid,
+      .home-hero,
+      .profile-editor,
+      .face-hero,
+      .face-layout,
+      .balanced-grid,
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(86vw, 312px);
+        z-index: 80;
+        transform: translateX(-105%);
+        transition: transform 260ms ease, box-shadow 260ms ease;
+        box-shadow: 30px 0 90px rgba(54, 43, 49, 0.12);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .mobile-menu {
+        display: inline-flex;
+      }
+
+      .main {
+        padding: 20px;
+      }
+
+      .right-panel,
+      .face-side,
+      .profile-hero-card {
+        position: static;
+      }
+
+      .hero-visual,
+      .face-visual,
+      .hair-visual,
+      .body-visual {
+        min-height: 280px;
+      }
+
+      .scan-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        font-size: 15px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+
+      .top-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) 1fr 48px;
+        gap: 8px;
+      }
+
+      .language-switcher {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .language-switcher select {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .btn,
+      .nav-btn,
+      input,
+      select,
+      textarea {
+        min-height: 48px;
+      }
+
+      .grid-2,
+      .grid-3,
+      .stats,
+      .face-stats,
+      .face-checklist,
+      .routine-tabs,
+      .skin-condition-grid,
+      .skin-mood-grid,
+      .body-mood-grid,
+      .badge-grid,
+      .quick-suggestions,
+      .ai-chat-form,
+      .notes-grid,
+      .notes-toolbar,
+      .scan-metrics,
+      .logout-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-card,
+      .daily-split,
+      .routine-item {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-overlay {
+        padding: 12px;
+        place-items: stretch;
+      }
+
+      .note-modal {
+        width: 100%;
+        max-height: calc(100dvh - 24px);
+        min-height: calc(100dvh - 24px);
+        border-radius: 24px;
+      }
+
+      .modal-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .modal-actions .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main {
+        padding: 14px;
+      }
+
+      .page-title h1 {
+        font-size: 28px;
+      }
+
+      .home-card,
+      .panel.pad,
+      .note-card {
+        border-radius: 20px;
+        padding: 16px;
+      }
+
+      .home-hero h2,
+      .face-hero h2,
+      .hero-panel h2 {
+        font-size: 31px;
+      }
+
+      .hero-actions,
+      .note-actions,
+      .routine-meta {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions .btn,
+      .note-actions button {
+        width: 100%;
+      }
+
+      .top-actions {
+        grid-template-columns: 48px minmax(0, 1fr) 48px;
+      }
+
+      .language-switcher {
+        grid-column: 1 / -1;
+        order: 3;
+      }
+
+      .avatar-picker {
+        grid-template-columns: repeat(4, minmax(44px, 1fr));
+      }
+
+      .splash-card {
+        width: min(100%, 330px);
+        padding: 24px;
+      }
+
+      .splash-logo {
+        width: 118px;
+        height: 118px;
+      }
+
+    }
+
+    /* Layout repair: keep sidebar fixed and let only dashboard content scroll. */
+    body:has(#appShell:not(.hidden)) {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #appShell.app-shell:not(.hidden) {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #appShell:not(.hidden) .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      z-index: 40;
+      width: 280px;
+      height: 100vh;
+      transform: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+    }
+
+    #appShell:not(.hidden) .main {
+      position: relative;
+      display: block;
+      width: calc(100% - 280px);
+      min-width: 0;
+      height: 100vh;
+      margin-left: 280px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      padding: 28px;
+    }
+
+    #appShell:not(.hidden) .view.active {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    @media (max-width: 992px) {
+      body:has(#appShell:not(.hidden)) {
+        overflow: hidden;
+      }
+
+      #appShell.app-shell:not(.hidden) {
+        display: block;
+      }
+
+      #appShell:not(.hidden) .sidebar {
+        width: min(86vw, 312px);
+        z-index: 80;
+        transform: translateX(-105%);
+        transition: transform 260ms ease, box-shadow 260ms ease;
+      }
+
+      #appShell:not(.hidden) .sidebar.open {
+        transform: translateX(0);
+      }
+
+      #appShell:not(.hidden) .main {
+        width: 100%;
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      #appShell:not(.hidden) .main {
+        padding: 14px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2430,7 +2824,7 @@
         <h1>GlowMate</h1>
       </div>
       <p class="muted" style="max-width:340px;">Your Personal AI Beauty & Wellness Companion</p>
-      <div class="tiny-loader" aria-label="Loading"></div>
+      <div class="tiny-loader" aria-label="Memuat"></div>
     </div>
   </section>
 
@@ -2469,20 +2863,19 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand-mark"><span class="logo">GM</span><span>GlowMate</span></div>
       <nav class="nav" aria-label="Menu utama">
-        <button class="nav-btn active" data-view="dashboard"><span class="nav-icon" data-icon="home"></span>Home</button>
-        <button class="nav-btn" data-view="routines"><span class="nav-icon" data-icon="sparkles"></span>Face Care</button>
-        <button class="nav-btn" data-view="bodycare"><span class="nav-icon" data-icon="flower"></span>Body Care</button>
-        <button class="nav-btn" data-view="haircare"><span class="nav-icon" data-icon="waves"></span>Hair Care</button>
-        <button class="nav-btn" data-view="achievement"><span class="nav-icon" data-icon="award"></span>Achievement</button>
-        <button class="nav-btn" data-view="assistant"><span class="nav-icon" data-icon="bot"></span>AI Assistant</button>
-        <button class="nav-btn" data-view="notes"><span class="nav-icon" data-icon="book-open"></span>Notes</button>
-        <button class="nav-btn" id="sidebarLogoutBtn" type="button"><span class="nav-icon" data-icon="log-out"></span>Logout</button>
+        <button class="nav-btn active" data-view="dashboard"><span class="nav-icon" data-icon="home"></span>Beranda</button>
+        <button class="nav-btn" data-view="routines"><span class="nav-icon" data-icon="sparkles"></span>Perawatan Wajah</button>
+        <button class="nav-btn" data-view="bodycare"><span class="nav-icon" data-icon="flower"></span>Perawatan Tubuh</button>
+        <button class="nav-btn" data-view="haircare"><span class="nav-icon" data-icon="waves"></span>Perawatan Rambut</button>
+        <button class="nav-btn" data-view="achievement"><span class="nav-icon" data-icon="award"></span>Pencapaian</button>
+        <button class="nav-btn" data-view="assistant"><span class="nav-icon" data-icon="bot"></span>Asisten AI</button>
+        <button class="nav-btn" data-view="notes"><span class="nav-icon" data-icon="book-open"></span>Catatan</button>
+        <button class="nav-btn" id="sidebarLogoutBtn" type="button"><span class="nav-icon" data-icon="log-out"></span>Keluar</button>
       </nav>
-      <div class="sidebar-footer">
-        <strong id="streakText">0 hari konsisten</strong>
-        <p class="muted" style="font-size:13px; margin-top:6px;">Selesaikan minimal 4 langkah hari ini untuk menjaga streak.</p>
-        <div style="height:1px; background:rgba(234,217,226,0.8); margin:14px 0;"></div>
-        <p class="muted" style="font-size:12px; line-height:1.5;"><strong>GlowMate v1.0</strong><br>Created by Mahera Putri Aminarti</p>
+      <div class="developer-card" aria-label="Profil pembuat GlowMate">
+        <div class="developer-row"><span>👩</span><span>Mahera Putri Aminarti</span></div>
+        <div class="developer-row"><span>💻</span><span>GitHub: raraajasii4-ux</span></div>
+        <div class="developer-row"><span>🌸</span><span>GlowMate v1.0</span></div>
       </div>
     </aside>
 
@@ -2493,7 +2886,7 @@
           <h1 id="pageTitle">Halo, GlowMate</h1>
         </div>
         <div class="top-actions">
-          <button class="btn btn-ghost btn-icon mobile-menu" id="menuBtn" type="button" aria-label="Buka menu">=</button>
+          <button class="btn btn-ghost btn-icon mobile-menu" id="menuBtn" type="button" aria-label="Buka menu"><span data-icon="menu"></span></button>
           <button class="btn btn-secondary" id="quickRoutineBtn" type="button">Mulai Rutinitas</button>
           <label class="language-switcher" aria-label="Language">
             <span>🌐</span>
@@ -2553,7 +2946,7 @@
                 <div class="scan-metric"><span>Pores</span><strong id="homePoresMetric">-</strong></div>
                 <div class="scan-metric"><span>Redness</span><strong id="homeRednessMetric">-</strong></div>
               </div>
-              <p class="journal-preview" id="homeAiSummary" style="margin-top:14px;">Scan summary will appear here.</p>
+              <p class="journal-preview" id="homeAiSummary" style="margin-top:14px;">Ringkasan scan akan muncul di sini.</p>
             </section>
 
             <div class="home-grid">
@@ -2562,8 +2955,8 @@
                 <div>
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Overall Routine</p>
-                      <h2>Daily Progress</h2>
+                      <p class="eyebrow">Rutinitas Keseluruhan</p>
+                      <h2>Progress Harian</h2>
                     </div>
                     <span class="mini-icon" data-icon="activity"></span>
                   </div>
@@ -2574,7 +2967,7 @@
 
               <section class="home-card">
                 <div class="card-title">
-                  <h2>Today's Summary</h2>
+                  <h2>Ringkasan Hari Ini</h2>
                   <span class="mini-icon" data-icon="list-checks"></span>
                 </div>
                 <div class="summary-list" id="todaySummary"></div>
@@ -2585,7 +2978,7 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <h2>Reminder</h2>
+                    <h2>Pengingat</h2>
                     <p class="muted">Selesaikan checklist self-care hari ini dengan santai.</p>
                   </div>
                   <button class="btn btn-ghost" id="resetDayBtn" type="button">Reset</button>
@@ -2595,7 +2988,7 @@
 
               <section class="home-card">
                 <div class="card-title">
-                  <h2>Mood Tracker</h2>
+                  <h2>Mood Hari Ini</h2>
                   <span class="mini-icon" data-icon="smile"></span>
                 </div>
                 <div class="mood-grid" id="moodTracker"></div>
@@ -2620,7 +3013,7 @@
               <div class="routine-meta" id="profileTags" style="justify-content:center; margin:16px 0 12px;"></div>
               <div class="progress-track home"><div class="progress-fill" id="profileProgress"></div></div>
               <p class="muted" style="margin-top:10px;" id="profileCompleteness">Lengkapi profil untuk rekomendasi lebih akurat.</p>
-              <button class="btn btn-secondary" data-view-link="profile" type="button" style="width:100%; margin-top:16px;"><span data-icon="user-pen"></span> Edit Profile</button>
+              <button class="btn btn-secondary" data-view-link="profile" type="button" style="width:100%; margin-top:16px;"><span data-icon="user-pen"></span> Edit Profil</button>
             </section>
 
             <section class="home-card">
@@ -2628,14 +3021,14 @@
                 <h2>Streak</h2>
                 <span class="mini-icon" data-icon="flame"></span>
               </div>
-              <div class="streak-value"><span>🔥</span><span id="streakDays">0 Days</span></div>
+              <div class="streak-value"><span>🔥</span><span id="streakDays">0 Hari</span></div>
               <p class="muted">Progress menuju minggu berikutnya.</p>
               <div class="progress-track home"><div class="progress-fill" id="streakProgress"></div></div>
             </section>
 
             <section class="home-card">
               <div class="card-title">
-                <h2 id="calendarTitle">Calendar</h2>
+                <h2 id="calendarTitle">Kalender</h2>
                 <span class="mini-icon" data-icon="calendar-days"></span>
               </div>
               <div class="calendar-grid" id="miniCalendar"></div>
@@ -2644,7 +3037,7 @@
             <section class="home-card">
               <div class="card-title">
                 <div>
-                  <h2>Water Tracker</h2>
+                  <h2>Minum Air</h2>
                   <p class="muted">Target <span id="waterTargetText">2 Liter</span></p>
                 </div>
                 <span class="mini-icon" data-icon="droplets"></span>
@@ -2652,12 +3045,12 @@
               <strong id="waterProgress">0/8 Gelas</strong>
               <div class="water-actions">
                 <button class="water-btn" id="waterMinusBtn" type="button" aria-label="Kurangi gelas air"><span data-icon="minus"></span></button>
-                <div class="water-percent" id="waterPercent">0% complete</div>
+                <div class="water-percent" id="waterPercent">0% selesai</div>
                 <button class="water-btn" id="waterPlusBtn" type="button" aria-label="Tambah gelas air"><span data-icon="plus"></span></button>
               </div>
               <div class="progress-track home"><div class="progress-fill" id="waterProgressFill"></div></div>
               <div class="water-glasses" id="waterGlasses"></div>
-              <p class="water-message" id="waterMessage">A little sip, a softer day.</p>
+              <p class="water-message" id="waterMessage">Sedikit minum air, harimu terasa lebih ringan.</p>
             </section>
 
             <section class="home-card hidden" aria-hidden="true">
@@ -2676,13 +3069,13 @@
         <div class="face-care-page">
           <section class="home-card face-hero">
             <div>
-              <p class="eyebrow">Face Care Studio</p>
-              <h2>Healthy Skin Starts with Small Habits ✨</h2>
-              <p class="muted" style="margin-top:12px;">Track tiny skincare rituals, products, skin mood, and AI-ready notes in one soft routine space.</p>
+              <p class="eyebrow">Studio Perawatan Wajah</p>
+              <h2>Kulit sehat dimulai dari kebiasaan kecil ✨</h2>
+              <p class="muted" style="margin-top:12px;">Pantau rutinitas skincare, produk, mood kulit, dan catatan AI dalam satu ruang yang lembut.</p>
               <div class="face-stats">
                 <div class="face-stat"><span>🔥 Streak</span><strong id="faceStreakStat">0</strong></div>
                 <div class="face-stat"><span>📅 Routine hari ini</span><strong id="faceRoutineStat">0/0</strong></div>
-                <div class="face-stat"><span>📈 Progress</span><strong id="faceProgressStat">0%</strong></div>
+                <div class="face-stat"><span>📈 Progres</span><strong id="faceProgressStat">0%</strong></div>
               </div>
             </div>
             <div class="face-hero-visual" aria-label="Woman applying skincare in front of mirror"></div>
@@ -2693,10 +3086,10 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Daily Routine</p>
-                    <h2>Face Care Checklist</h2>
+                    <p class="eyebrow">Rutinitas Harian</p>
+                    <h2>Checklist Perawatan Wajah</h2>
                   </div>
-                  <button class="btn btn-secondary" id="completeAllBtn" type="button"><span data-icon="check-check"></span>Complete Day</button>
+                  <button class="btn btn-secondary" id="completeAllBtn" type="button"><span data-icon="check-check"></span>Selesaikan Hari Ini</button>
                 </div>
                 <div class="routine-tabs" id="faceTabs"></div>
                 <div class="face-checklist" id="faceChecklist"></div>
@@ -2705,8 +3098,8 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <h2>Weekly Treatment</h2>
-                    <p class="muted">Gentle exfoliation and mask cadence for this week.</p>
+                    <h2>Perawatan Mingguan</h2>
+                    <p class="muted">Jadwal exfoliation dan masker lembut untuk minggu ini.</p>
                   </div>
                   <span class="mini-icon" data-icon="calendar-check"></span>
                 </div>
@@ -2750,24 +3143,24 @@
                   <div class="card-title">
                     <div>
                       <p class="eyebrow">Glow AI</p>
-                      <h2>AI Skin Tip</h2>
+                      <h2>Tips Kulit AI</h2>
                     </div>
                     <span class="mini-icon" data-icon="bot"></span>
                   </div>
-                  <p class="journal-preview" id="faceAiSkinTip">Loading skin tip...</p>
+                  <p class="journal-preview" id="faceAiSkinTip">Memuat tips kulit...</p>
                 </section>
 
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Skin Journey</p>
-                      <h2>Before & After Progress</h2>
+                      <p class="eyebrow">Perjalanan Kulit</p>
+                      <h2>Progress Sebelum & Sesudah</h2>
                     </div>
                     <span class="mini-icon" data-icon="image"></span>
                   </div>
                   <div class="balanced-grid">
-                    <div class="mini-metric-card"><span class="tag">Before</span><strong id="faceBeforeScore">0%</strong><p class="muted">Start point</p></div>
-                    <div class="mini-metric-card"><span class="tag mint">After</span><strong id="faceAfterScore">0%</strong><p class="muted">Today glow</p></div>
+                    <div class="mini-metric-card"><span class="tag">Sebelum</span><strong id="faceBeforeScore">0%</strong><p class="muted">Titik awal</p></div>
+                    <div class="mini-metric-card"><span class="tag mint">Sesudah</span><strong id="faceAfterScore">0%</strong><p class="muted">Glow hari ini</p></div>
                   </div>
                 </section>
               </div>
@@ -2776,13 +3169,13 @@
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Consistency</p>
-                      <h2>Weekly Progress</h2>
+                      <p class="eyebrow">Konsistensi</p>
+                      <h2>Progress Mingguan</h2>
                     </div>
                     <span class="mini-icon" data-icon="calendar-check"></span>
                   </div>
                   <div class="progress-track home"><div class="progress-fill" id="faceWeeklyFill"></div></div>
-                  <p class="muted" style="margin-top:10px;" id="faceWeeklyCopy">0% weekly consistency.</p>
+                  <p class="muted" style="margin-top:10px;" id="faceWeeklyCopy">0% konsistensi mingguan.</p>
                 </section>
 
                 <section class="home-card">
@@ -2850,13 +3243,13 @@
         <div class="face-care-page body-care-page">
           <section class="home-card face-hero body-hero">
             <div>
-              <p class="eyebrow">Body Care Studio</p>
-              <h2>Soft strength, steady glow.</h2>
-              <p class="muted" style="margin-top:12px;">A peach-toned space for body care, pilates movement, and healthy habits.</p>
+              <p class="eyebrow">Studio Perawatan Tubuh</p>
+              <h2>Tubuh lebih segar, glow lebih stabil.</h2>
+              <p class="muted" style="margin-top:12px;">Ruang bernuansa peach untuk perawatan tubuh, pilates, dan kebiasaan sehat.</p>
               <div class="face-stats">
-                <div class="face-stat"><span>🧴 Body Care</span><strong id="bodyCareStat">0/0</strong></div>
+                <div class="face-stat"><span>🧴 Perawatan Tubuh</span><strong id="bodyCareStat">0/0</strong></div>
                 <div class="face-stat"><span>🧘 Pilates</span><strong id="pilatesStat">0/0</strong></div>
-                <div class="face-stat"><span>📈 Progress</span><strong id="bodyProgressStat">0%</strong></div>
+                <div class="face-stat"><span>📈 Progres</span><strong id="bodyProgressStat">0%</strong></div>
               </div>
             </div>
             <div class="face-hero-visual body-hero-visual" aria-label="Woman stretching and applying body lotion"></div>
@@ -2867,8 +3260,8 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Daily Body Ritual</p>
-                    <h2>Daily Workout</h2>
+                    <p class="eyebrow">Rutinitas Tubuh Harian</p>
+                    <h2>Workout Hari Ini</h2>
                   </div>
                   <span class="mini-icon" data-icon="flower"></span>
                 </div>
@@ -2879,26 +3272,26 @@
                 <div class="card-title">
                   <div>
                     <h2>Pilates</h2>
-                    <p class="muted">Choose a move, start a gentle timer, and mark it complete.</p>
+                    <p class="muted">Pilih gerakan, mulai timer lembut, lalu tandai selesai.</p>
                   </div>
                   <span class="mini-icon" data-icon="timer"></span>
                 </div>
-                <h3 style="margin-bottom:12px;">Workout Timer</h3>
+                <h3 style="margin-bottom:12px;">Timer Workout</h3>
                 <div class="face-checklist" id="pilatesChecklist"></div>
                 <div class="water-actions">
                   <button class="water-btn" id="pilatesMinusBtn" type="button" aria-label="Kurangi timer"><span data-icon="minus"></span></button>
                   <div class="water-percent" id="pilatesTimerText">05:00</div>
                   <button class="water-btn" id="pilatesPlusBtn" type="button" aria-label="Tambah timer"><span data-icon="plus"></span></button>
                 </div>
-                <button class="btn btn-primary" id="pilatesTimerBtn" type="button" style="width:100%; margin-top:12px;"><span data-icon="play"></span>Start Timer</button>
+                <button class="btn btn-primary" id="pilatesTimerBtn" type="button" style="width:100%; margin-top:12px;"><span data-icon="play"></span>Mulai Timer</button>
               </section>
 
               <div class="balanced-grid">
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Hydration</p>
-                      <h2>Hydration Tracker</h2>
+                      <p class="eyebrow">Minum Air</p>
+                      <h2>Tracker Minum Air</h2>
                     </div>
                     <span class="mini-icon" data-icon="droplets"></span>
                   </div>
@@ -2914,8 +3307,8 @@
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Nutrition</p>
-                      <h2>Healthy Meals</h2>
+                      <p class="eyebrow">Nutrisi</p>
+                      <h2>Makanan Sehat</h2>
                     </div>
                     <span class="mini-icon" data-icon="salad"></span>
                   </div>
@@ -2927,8 +3320,8 @@
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <h2>Sleep Tracker</h2>
-                      <p class="muted">Keep rest gentle and consistent.</p>
+                      <h2>Tracker Tidur</h2>
+                      <p class="muted">Jaga istirahat tetap cukup dan konsisten.</p>
                     </div>
                     <span class="mini-icon" data-icon="moon"></span>
                   </div>
@@ -2938,8 +3331,8 @@
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <h2>Stretch Reminder</h2>
-                      <p class="muted">A short reset for your neck, back, and waist.</p>
+                      <h2>Pengingat Stretching</h2>
+                      <p class="muted">Reset singkat untuk leher, punggung, dan pinggang.</p>
                     </div>
                     <span class="mini-icon" data-icon="bell"></span>
                   </div>
@@ -2951,30 +3344,30 @@
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Movement</p>
-                      <h2>Daily Steps</h2>
+                      <p class="eyebrow">Gerakan</p>
+                      <h2>Langkah Harian</h2>
                     </div>
                     <span class="mini-icon" data-icon="footprints"></span>
                   </div>
                   <div class="mini-metric-card">
-                    <span class="tag mint">Today</span>
+                    <span class="tag mint">Hari Ini</span>
                     <strong id="bodyStepsText">4,800</strong>
-                    <p class="muted">Estimated gentle movement.</p>
+                    <p class="muted">Estimasi gerakan ringan.</p>
                   </div>
                 </section>
 
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Energy</p>
-                      <h2>Calories Burned</h2>
+                      <p class="eyebrow">Energi</p>
+                      <h2>Kalori Terbakar</h2>
                     </div>
                     <span class="mini-icon" data-icon="flame"></span>
                   </div>
                   <div class="mini-metric-card">
-                    <span class="tag sun">Active</span>
+                    <span class="tag sun">Aktif</span>
                     <strong id="bodyCaloriesText">120 kcal</strong>
-                    <p class="muted">Based on today's activity.</p>
+                    <p class="muted">Berdasarkan aktivitas hari ini.</p>
                   </div>
                 </section>
               </div>
@@ -2982,13 +3375,13 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Weekly Activity</p>
-                    <h2>Body Care & Movement</h2>
+                    <p class="eyebrow">Aktivitas Mingguan</p>
+                    <h2>Perawatan Tubuh & Gerakan</h2>
                   </div>
                   <span class="mini-icon" data-icon="bar-chart-3"></span>
                 </div>
                 <div class="progress-track home"><div class="progress-fill" id="bodyActivityFill"></div></div>
-                <p class="muted" style="margin-top:10px;" id="bodyActivityCopy">0% activity completed this week.</p>
+                <p class="muted" style="margin-top:10px;" id="bodyActivityCopy">0% aktivitas selesai minggu ini.</p>
                 <div class="weekly-list" id="healthyHabitList" style="margin-top:14px;"></div>
               </section>
             </div>
@@ -2996,7 +3389,7 @@
             <aside class="face-side">
               <section class="home-card">
                 <div class="card-title">
-                  <h2>Body Mood</h2>
+                  <h2>Mood Tubuh</h2>
                   <span class="mini-icon" data-icon="smile"></span>
                 </div>
                 <div class="body-mood-grid" id="bodyMoodGrid"></div>
@@ -3004,15 +3397,15 @@
 
               <section class="home-card">
                 <div class="card-title">
-                  <h2>Weekly Progress</h2>
+                  <h2>Progress Mingguan</h2>
                   <span class="mini-icon" data-icon="trending-up"></span>
                 </div>
                 <div class="face-progress-wrap">
                   <div class="face-progress-ring body-progress-ring" id="bodyProgressRing"><strong id="bodyProgressNumber">0%</strong></div>
-                  <p class="muted" id="bodyProgressCopy">Small movement counts.</p>
+                  <p class="muted" id="bodyProgressCopy">Gerakan kecil tetap berarti.</p>
                 </div>
                 <div class="progress-track home"><div class="progress-fill" id="bodyWeeklyFill"></div></div>
-                <p class="muted" style="margin-top:10px;" id="bodyWeeklyCopy">0% weekly progress.</p>
+                <p class="muted" style="margin-top:10px;" id="bodyWeeklyCopy">0% progress mingguan.</p>
               </section>
 
               <section class="home-card quote-card">
@@ -3052,13 +3445,13 @@
         <div class="face-care-page hair-care-page">
           <section class="home-card face-hero hair-hero">
             <div>
-              <p class="eyebrow">Hair Care Studio</p>
-              <h2>Healthy hair, soft rituals, steady shine.</h2>
-              <p class="muted" style="margin-top:12px;">Track hair routine, goals, notes, favorite products, and weekly shine progress.</p>
+              <p class="eyebrow">Studio Perawatan Rambut</p>
+              <h2>Rambut sehat, rutinitas lembut, kilau stabil.</h2>
+              <p class="muted" style="margin-top:12px;">Pantau rutinitas rambut, target, catatan, produk favorit, dan progress kilau mingguan.</p>
               <div class="face-stats">
-                <div class="face-stat"><span>💇 Hair Score</span><strong id="hairScoreStat">0</strong></div>
-                <div class="face-stat"><span>📅 Weekly Progress</span><strong id="hairWeeklyStat">0%</strong></div>
-                <div class="face-stat"><span>📈 Progress</span><strong id="hairProgressStat">0%</strong></div>
+                <div class="face-stat"><span>💇 Skor Rambut</span><strong id="hairScoreStat">0</strong></div>
+                <div class="face-stat"><span>📅 Progress Mingguan</span><strong id="hairWeeklyStat">0%</strong></div>
+                <div class="face-stat"><span>📈 Progres</span><strong id="hairProgressStat">0%</strong></div>
               </div>
             </div>
             <div class="face-hero-visual hair-hero-visual" aria-label="Woman brushing hair"></div>
@@ -3069,8 +3462,8 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Daily Hair Ritual</p>
-                    <h2>Hair Routine</h2>
+                    <p class="eyebrow">Rutinitas Rambut Harian</p>
+                    <h2>Rutinitas Rambut</h2>
                   </div>
                   <span class="mini-icon" data-icon="waves"></span>
                 </div>
@@ -3080,14 +3473,14 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <h2>Favorite Products</h2>
+                    <h2>Produk Favorit</h2>
                     <p class="muted">Simpan produk rambut favorit lengkap dengan foto kecil.</p>
                   </div>
                   <span class="mini-icon" data-icon="package-heart"></span>
                 </div>
                 <form class="form-grid" id="hairProductForm" style="margin-top:0;">
                   <div class="grid-3">
-                    <label>Category
+                    <label>Kategori
                       <select id="hairProductCategoryInput">
                         <option>Shampoo</option>
                         <option>Conditioner</option>
@@ -3097,14 +3490,14 @@
                         <option>Hair Tonic</option>
                       </select>
                     </label>
-                    <label>Product
+                    <label>Produk
                       <input id="hairProductNameInput" placeholder="Nama produk" />
                     </label>
-                    <label>Photo URL
+                    <label>URL Foto
                       <input id="hairProductPhotoInput" placeholder="https://..." />
                     </label>
                   </div>
-                  <button class="btn btn-primary" type="submit"><span data-icon="plus"></span>Add Favorite</button>
+                  <button class="btn btn-primary" type="submit"><span data-icon="plus"></span>Tambah Favorit</button>
                 </form>
                 <div class="products-grid" id="hairProducts"></div>
               </section>
@@ -3112,16 +3505,16 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Journal</p>
-                    <h2>Hair Journal</h2>
+                    <p class="eyebrow">Jurnal</p>
+                    <h2>Jurnal Rambut</h2>
                   </div>
                   <span class="mini-icon" data-icon="notebook-pen"></span>
                 </div>
                 <div class="grid-2">
-                  <label>Date
+                  <label>Tanggal
                     <input id="hairJournalDateInput" type="date" />
                   </label>
-                  <label>Hair Condition
+                  <label>Kondisi Rambut
                     <select id="hairConditionInput">
                       <option>Soft & Healthy</option>
                       <option>Dry</option>
@@ -3132,30 +3525,30 @@
                     </select>
                   </label>
                 </div>
-                <label style="margin-top:12px;">Notes
-                  <textarea id="hairJournalNotesInput" placeholder="My hair feels smoother after today's routine."></textarea>
+                <label style="margin-top:12px;">Catatan
+                  <textarea id="hairJournalNotesInput" placeholder="Rambut terasa lebih lembut setelah rutinitas hari ini."></textarea>
                 </label>
-                <button class="btn btn-primary" id="saveHairJournalBtn" type="button" style="width:100%; margin-top:10px;"><span data-icon="save"></span>Save Hair Journal</button>
+                <button class="btn btn-primary" id="saveHairJournalBtn" type="button" style="width:100%; margin-top:10px;"><span data-icon="save"></span>Simpan Jurnal Rambut</button>
               </section>
 
               <div class="balanced-grid">
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Shine Score</p>
-                      <h2>Hair Progress</h2>
+                      <p class="eyebrow">Skor Kilau</p>
+                      <h2>Progres Rambut</h2>
                     </div>
                     <span class="mini-icon" data-icon="trending-up"></span>
                   </div>
                   <div class="progress-track home"><div class="progress-fill" id="hairMainProgressFill"></div></div>
-                  <p class="muted" style="margin-top:10px;" id="hairMainProgressCopy">0% hair routine completed.</p>
+                  <p class="muted" style="margin-top:10px;" id="hairMainProgressCopy">0% rutinitas rambut selesai.</p>
                 </section>
 
                 <section class="home-card">
                   <div class="card-title">
                     <div>
-                      <p class="eyebrow">Weekly Care</p>
-                      <h2>Weekly Hair Routine</h2>
+                      <p class="eyebrow">Perawatan Mingguan</p>
+                      <h2>Rutinitas Rambut Mingguan</h2>
                     </div>
                     <span class="mini-icon" data-icon="calendar-check"></span>
                   </div>
@@ -3166,27 +3559,27 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">Reminder</p>
-                    <h2>Hair Care Reminder</h2>
+                    <p class="eyebrow">Pengingat</p>
+                    <h2>Pengingat Perawatan Rambut</h2>
                   </div>
                   <span class="mini-icon" data-icon="bell"></span>
                 </div>
                 <div class="balanced-grid">
-                  <div class="mini-metric-card"><span class="tag">Today</span><strong id="hairReminderToday">Scalp Massage</strong><p class="muted">A gentle 2-minute reminder.</p></div>
-                  <div class="mini-metric-card"><span class="tag mint">Next</span><strong id="hairReminderNext">Hair Mask</strong><p class="muted">Plan a weekly nourishing step.</p></div>
+                  <div class="mini-metric-card"><span class="tag">Hari Ini</span><strong id="hairReminderToday">Scalp Massage</strong><p class="muted">Pengingat lembut selama 2 menit.</p></div>
+                  <div class="mini-metric-card"><span class="tag mint">Selanjutnya</span><strong id="hairReminderNext">Hair Mask</strong><p class="muted">Rencanakan perawatan nutrisi mingguan.</p></div>
                 </div>
               </section>
 
               <section class="home-card hidden" aria-hidden="true">
                 <div class="card-title">
                   <div>
-                    <h2>Hair Notes</h2>
+                    <h2>Catatan Rambut</h2>
                     <p class="muted">Catatan tekstur, rontok, scalp, atau produk yang cocok hari ini.</p>
                   </div>
                   <span class="mini-icon" data-icon="notebook-pen"></span>
                 </div>
                 <textarea id="hairNotesInput" placeholder="Contoh: rambut lebih lembut setelah hair oil..."></textarea>
-                <button class="btn btn-primary" id="saveHairNoteBtn" type="button" style="width:100%; margin-top:10px;">Save Hair Notes</button>
+                <button class="btn btn-primary" id="saveHairNoteBtn" type="button" style="width:100%; margin-top:10px;">Simpan Catatan Rambut</button>
               </section>
             </div>
 
@@ -3195,8 +3588,8 @@
                 <div class="face-progress-wrap">
                   <div class="face-progress-ring hair-progress-ring" id="hairProgressRing"><strong id="hairProgressNumber">0%</strong></div>
                   <div>
-                    <h2>Hair Progress</h2>
-                    <p class="muted" id="hairProgressCopy">Start with a gentle hair step.</p>
+                    <h2>Progres Rambut</h2>
+                    <p class="muted" id="hairProgressCopy">Mulai dari satu langkah perawatan rambut.</p>
                   </div>
                 </div>
               </section>
@@ -3234,13 +3627,13 @@
         <div class="face-care-page achievement-page">
           <section class="home-card face-hero achievement-hero">
             <div>
-              <p class="eyebrow">Achievement</p>
-              <h2>Your self-care milestones are blooming.</h2>
-              <p class="muted" style="margin-top:12px;">Unlock premium badges from daily rituals, hydration, sleep, pilates, skin glow, and hair care.</p>
+              <p class="eyebrow">Pencapaian</p>
+              <h2>Milestone self-care kamu mulai bermekaran.</h2>
+              <p class="muted" style="margin-top:12px;">Buka badge premium dari rutinitas harian, minum air, tidur, pilates, skin glow, dan perawatan rambut.</p>
               <div class="face-stats">
                 <div class="face-stat"><span>🏆 Level</span><strong id="achievementLevel">1</strong></div>
-                <div class="face-stat"><span>✨ Unlocked</span><strong id="achievementUnlocked">0</strong></div>
-                <div class="face-stat"><span>📈 Progress</span><strong id="achievementProgress">0%</strong></div>
+                <div class="face-stat"><span>✨ Terbuka</span><strong id="achievementUnlocked">0</strong></div>
+                <div class="face-stat"><span>📈 Progres</span><strong id="achievementProgress">0%</strong></div>
               </div>
             </div>
             <div class="trophy-visual" aria-label="Premium trophy illustration">🏆</div>
@@ -3249,7 +3642,7 @@
           <section class="home-card">
             <div class="card-title">
               <div>
-                <p class="eyebrow">Level System</p>
+                <p class="eyebrow">Sistem Level</p>
                 <h2 id="achievementLevelName">Level 1 - Beginner</h2>
               </div>
               <span class="mini-icon" data-icon="crown"></span>
@@ -3260,8 +3653,8 @@
           <section class="home-card">
             <div class="card-title">
               <div>
-                <p class="eyebrow">Badge Collection</p>
-                <h2>Premium Badges</h2>
+                <p class="eyebrow">Koleksi Badge</p>
+                <h2>Badge Premium</h2>
               </div>
               <span class="mini-icon" data-icon="medal"></span>
             </div>
@@ -3275,11 +3668,11 @@
           <section class="home-card face-hero ai-hero">
             <div>
               <p class="eyebrow">Glow AI</p>
-              <h2>Hi, I'm Glow AI ✨</h2>
-              <p class="muted" style="margin-top:12px;">Your Personal Beauty & Wellness Assistant</p>
+              <h2>Hai, aku Glow AI ✨</h2>
+              <p class="muted" style="margin-top:12px;">Asisten kecantikan dan wellness pribadimu</p>
               <div class="hero-actions">
                 <button class="btn btn-primary" data-ai-suggestion="Rutinitas skincare untuk kulit berminyak?" type="button"><span data-icon="sparkles"></span> Tanya Skincare</button>
-                <button class="btn btn-secondary" data-ai-suggestion="Hydration AI: berapa banyak air yang harus diminum hari ini?" type="button"><span data-icon="droplets"></span> Hydration AI</button>
+                <button class="btn btn-secondary" data-ai-suggestion="Asisten Minum Air: berapa banyak air yang harus diminum hari ini?" type="button"><span data-icon="droplets"></span> Asisten Minum Air</button>
               </div>
             </div>
             <div class="ai-visual" aria-label="Friendly AI Assistant illustration">✨</div>
@@ -3290,8 +3683,8 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <p class="eyebrow">AI Chat</p>
-                    <h2>Beauty & Wellness Coach</h2>
+                    <p class="eyebrow">Chat AI</p>
+                    <h2>Coach Kecantikan & Wellness</h2>
                   </div>
                   <span class="mini-icon" data-icon="bot"></span>
                 </div>
@@ -3306,7 +3699,7 @@
             <aside class="face-side">
               <section class="home-card">
                 <div class="card-title">
-                  <h2>Quick Suggestions</h2>
+                  <h2>Pilihan Cepat</h2>
                   <span class="mini-icon" data-icon="wand-sparkles"></span>
                 </div>
                 <div class="quick-suggestions" id="aiSuggestions"></div>
@@ -3315,20 +3708,20 @@
               <section class="home-card">
                 <div class="card-title">
                   <div>
-                    <h2>💧 Hydration AI</h2>
+                    <h2>💧 Asisten Minum Air</h2>
                     <p class="muted">Pantau minum air dan minta saran hidrasi.</p>
                   </div>
                   <span class="mini-icon" data-icon="droplets"></span>
                 </div>
-                <button class="btn btn-secondary" id="openHydrationAiBtn" type="button" style="width:100%;"><span data-icon="sparkles"></span>Open Hydration AI</button>
+                <button class="btn btn-secondary" id="openHydrationAiBtn" type="button" style="width:100%;"><span data-icon="sparkles"></span>Buka Asisten Minum Air</button>
               </section>
 
               <section class="home-card quote-card">
                 <div class="card-title">
                   <span class="mini-icon" data-icon="sparkles"></span>
-                  <span class="tag mint">Today's AI Recommendation</span>
+                  <span class="tag mint">Rekomendasi AI Hari Ini</span>
                 </div>
-                <blockquote id="aiRecommendation">"Start with one small self-care step today."</blockquote>
+                <blockquote id="aiRecommendation">"Mulai dari satu langkah self-care kecil hari ini."</blockquote>
               </section>
             </aside>
           </div>
@@ -3339,30 +3732,30 @@
         <div class="notes-page">
           <section class="home-card notes-hero">
             <div>
-              <p class="eyebrow">Journal</p>
-              <h2>📖 My Notes</h2>
-              <p class="muted" style="margin-top:10px;">My skincare & wellness journal.</p>
+              <p class="eyebrow">Jurnal</p>
+              <h2>📖 Catatan</h2>
+              <p class="muted" style="margin-top:10px;">Jurnal skincare dan wellness pribadimu.</p>
             </div>
-            <button class="btn btn-primary" id="newNoteBtn" type="button"><span data-icon="plus"></span>New Note</button>
+            <button class="btn btn-primary" id="newNoteBtn" type="button"><span data-icon="plus"></span>Catatan Baru</button>
           </section>
 
           <section class="home-card">
             <div class="notes-toolbar">
               <label class="notes-search" aria-label="Cari catatan">
                 <span data-icon="search"></span>
-                <input id="notesSearchInput" placeholder="Cari judul, isi note, atau category..." />
+                <input id="notesSearchInput" placeholder="Cari judul, isi catatan, atau kategori..." />
               </label>
-              <span class="tag mint" id="notesCount">0 notes</span>
+              <span class="tag mint" id="notesCount">0 catatan</span>
             </div>
           </section>
 
           <section class="notes-section" id="pinnedNotesSection">
-            <h3 class="notes-section-title">⭐ Pinned Notes</h3>
+            <h3 class="notes-section-title">⭐ Catatan Disematkan</h3>
             <div class="notes-grid" id="pinnedNotesGrid"></div>
           </section>
 
           <section class="notes-section">
-            <h3 class="notes-section-title">📖 Notes lainnya</h3>
+            <h3 class="notes-section-title">📖 Catatan lainnya</h3>
             <div class="notes-grid" id="notesGrid"></div>
           </section>
 
@@ -3407,8 +3800,8 @@
           <section class="home-card profile-form-card">
             <div class="card-title">
               <div>
-                <p class="eyebrow">Edit Profile</p>
-                <h2>Personal Wellness Profile</h2>
+                <p class="eyebrow">Edit Profil</p>
+                <h2>Profil Wellness Pribadi</h2>
               </div>
               <span class="mini-icon" data-icon="user-pen"></span>
             </div>
@@ -3535,43 +3928,43 @@
     <div class="note-modal" role="dialog" aria-modal="true" aria-labelledby="noteModalTitle">
       <div class="card-title">
         <div>
-          <p class="eyebrow">My Notes</p>
-          <h2 id="noteModalTitle">New Note</h2>
+          <p class="eyebrow">Catatan</p>
+          <h2 id="noteModalTitle">Catatan Baru</h2>
         </div>
         <span class="mini-icon" data-icon="book-open"></span>
       </div>
       <form class="form-grid" id="noteForm">
         <input id="noteIdInput" type="hidden" />
-        <label>Note Title
-          <input id="noteTitleInput" placeholder="Contoh: Skin progress minggu ini" required />
+        <label>Judul Catatan
+          <input id="noteTitleInput" placeholder="Contoh: Progress kulit minggu ini" required />
         </label>
         <div class="grid-2">
-          <label>Category
+          <label>Kategori
             <select id="noteCategoryInput">
-              <option>🌸 Face Care</option>
-              <option>🧴 Body Care</option>
-              <option>💆 Hair Care</option>
-              <option>💧 Hydration</option>
-              <option>🤖 AI Assistant</option>
-              <option>📝 General</option>
+              <option>🌸 Perawatan Wajah</option>
+              <option>🧴 Perawatan Tubuh</option>
+              <option>💆 Perawatan Rambut</option>
+              <option>💧 Minum Air</option>
+              <option>🤖 Asisten AI</option>
+              <option>📝 Umum</option>
             </select>
           </label>
           <label>Mood
             <select id="noteMoodInput">
-              <option>😊 Happy</option>
+              <option>😊 Senang</option>
               <option>🥰 Glowing</option>
-              <option>😌 Calm</option>
-              <option>😴 Tired</option>
-              <option>😭 Stressed</option>
+              <option>😌 Tenang</option>
+              <option>😴 Lelah</option>
+              <option>😭 Stres</option>
             </select>
           </label>
         </div>
-        <label>Isi Note
+        <label>Isi Catatan
           <textarea id="noteBodyInput" placeholder="Tulis catatan self-care kamu..." style="min-height:180px;"></textarea>
         </label>
         <div class="modal-actions">
-          <button class="btn btn-ghost" id="cancelNoteBtn" type="button">❌ Cancel</button>
-          <button class="btn btn-primary" id="saveNoteSubmitBtn" type="submit"><span data-icon="save"></span>💾 Save</button>
+          <button class="btn btn-ghost" id="cancelNoteBtn" type="button">❌ Batal</button>
+          <button class="btn btn-primary" id="saveNoteSubmitBtn" type="submit"><span data-icon="save"></span>💾 Simpan</button>
         </div>
       </form>
     </div>
@@ -3581,8 +3974,8 @@
     <div class="note-modal" role="dialog" aria-modal="true" aria-labelledby="noteDetailTitle">
       <div class="card-title">
         <div>
-          <p class="eyebrow" id="noteDetailCategory">My Notes</p>
-          <h2 id="noteDetailTitle">Note</h2>
+          <p class="eyebrow" id="noteDetailCategory">Catatan</p>
+          <h2 id="noteDetailTitle">Catatan</h2>
         </div>
         <span class="mini-icon" data-icon="book-open-check"></span>
       </div>
@@ -3598,11 +3991,11 @@
   <section class="modal-overlay" id="deleteNoteOverlay" aria-hidden="true">
     <div class="delete-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteNoteTitle">
       <div class="notes-empty-illustration" style="width:78px;height:78px;font-size:40px;margin-bottom:14px;">🗑</div>
-      <h2 id="deleteNoteTitle">Hapus note ini?</h2>
+      <h2 id="deleteNoteTitle">Hapus catatan ini?</h2>
       <p class="muted" style="margin-top:8px;">Catatan yang dihapus tidak bisa dikembalikan.</p>
       <div class="modal-actions" style="justify-content:center;">
-        <button class="btn btn-ghost" id="cancelDeleteNoteBtn" type="button">Cancel</button>
-        <button class="btn btn-primary" id="confirmDeleteNoteBtn" type="button">Delete</button>
+        <button class="btn btn-ghost" id="cancelDeleteNoteBtn" type="button">Batal</button>
+        <button class="btn btn-primary" id="confirmDeleteNoteBtn" type="button">Hapus</button>
       </div>
     </div>
   </section>
@@ -3696,12 +4089,18 @@
   <section class="logout-screen" id="logoutScreen" aria-live="polite">
     <div class="logout-card">
       <div class="floating-sparkles"><span>✦</span><span>✧</span><span>🌸</span><span>✦</span></div>
-      <div class="logout-illustration">🌸</div>
+      <div class="logout-illustration"><img src="./assets/glowmate-logo.jpeg" alt="Logo GlowMate" /></div>
       <p class="eyebrow">GlowMate</p>
-      <h2 id="logoutTitle">See You Again!</h2>
-      <p class="logout-quote" id="logoutQuote">Thank you for taking care of yourself today.</p>
-      <div class="logout-summary" id="logoutSummary"></div>
-      <p class="muted" style="margin-top:18px;">See you tomorrow. Your future self will thank you. ✨</p>
+      <h2 id="logoutTitle">Sampai Jumpa! 👋</h2>
+      <p class="logout-quote" id="logoutQuote">Terima kasih telah menggunakan GlowMate.<br>Semoga rutinitas sehatmu tetap konsisten setiap hari.<br>Sampai bertemu lagi! 🌸</p>
+      <div class="logout-credit" id="logoutSummary">
+        <span class="logout-divider">━━━━━━━━━━━━━━━━━━</span>
+        <strong>GlowMate v1.0</strong>
+        <span>Dibuat oleh Mahera Putri Aminarti</span>
+        <span>GitHub: raraajasii4-ux</span>
+        <span>© 2026 GlowMate</span>
+        <span class="logout-divider">━━━━━━━━━━━━━━━━━━</span>
+      </div>
     </div>
   </section>
 
@@ -3908,50 +4307,50 @@
     const i18n = {
       id: {
         quickRoutine: "Mulai Rutinitas",
-        dashboard: "Dashboard",
+        dashboard: "Beranda",
         homeTitle: "Halo, ",
-        faceCare: "Face Care",
-        faceTitle: "Healthy Skin Starts with Small Habits",
-        bodyCare: "Body Care",
-        bodyTitle: "Body care dan healthy habit",
-        hairCare: "Hair Care",
-        hairTitle: "Hair care dan shine routine",
-        achievement: "Achievement",
-        achievementTitle: "Badge dan level GlowMate",
-        assistant: "AI Assistant",
-        assistantTitle: "Beauty & wellness coach pribadi",
-        recommendations: "Glow Plan",
+        faceCare: "Perawatan Wajah",
+        faceTitle: "Kulit sehat dimulai dari kebiasaan kecil",
+        bodyCare: "Perawatan Tubuh",
+        bodyTitle: "Perawatan tubuh dan kebiasaan sehat",
+        hairCare: "Perawatan Rambut",
+        hairTitle: "Perawatan rambut dan rutinitas kilau",
+        achievement: "Pencapaian",
+        achievementTitle: "Lencana dan level GlowMate",
+        assistant: "Asisten AI",
+        assistantTitle: "Asisten kecantikan dan wellness pribadi",
+        recommendations: "Rencana Glow",
         recommendationsTitle: "Rekomendasi personal",
-        profile: "Profile",
+        profile: "Profil",
         profileTitle: "Kenali kebutuhanmu",
-        settings: "Settings",
+        settings: "Pengaturan",
         settingsTitle: "Akun dan reminder",
-        profileUpdated: "✅ Profile updated successfully.",
+        profileUpdated: "✅ Profil berhasil diperbarui.",
         noteSaved: "Catatan hasil disimpan.",
         logout: "Kamu sudah keluar."
       },
       en: {
         quickRoutine: "Start routine",
-        dashboard: "Dashboard",
+        dashboard: "Beranda",
         homeTitle: "Hello, ",
-        faceCare: "Face Care",
-        faceTitle: "Healthy Skin Starts with Small Habits",
-        bodyCare: "Body Care",
-        bodyTitle: "Body care and healthy habits",
-        hairCare: "Hair Care",
-        hairTitle: "Hair care and shine routine",
-        achievement: "Achievement",
-        achievementTitle: "GlowMate badges and levels",
-        assistant: "AI Assistant",
-        assistantTitle: "Your personal beauty & wellness coach",
-        recommendations: "Glow Plan",
+        faceCare: "Perawatan Wajah",
+        faceTitle: "Kulit sehat dimulai dari kebiasaan kecil",
+        bodyCare: "Perawatan Tubuh",
+        bodyTitle: "Perawatan tubuh dan kebiasaan sehat",
+        hairCare: "Perawatan Rambut",
+        hairTitle: "Perawatan rambut dan rutinitas kilau",
+        achievement: "Pencapaian",
+        achievementTitle: "Lencana dan level GlowMate",
+        assistant: "Asisten AI",
+        assistantTitle: "Asisten kecantikan dan wellness pribadi",
+        recommendations: "Rencana Glow",
         recommendationsTitle: "Personal recommendations",
-        profile: "Profile",
+        profile: "Profil",
         profileTitle: "Know your needs",
-        settings: "Settings",
+        settings: "Pengaturan",
         settingsTitle: "Account and reminders",
-        profileUpdated: "✅ Profile updated successfully.",
-        noteSaved: "Daily note saved.",
+        profileUpdated: "✅ Profil berhasil diperbarui.",
+        noteSaved: "Catatan hasil disimpan.",
         logout: "You have logged out."
       }
     };
@@ -4118,11 +4517,11 @@
 
     const aiQuickSuggestions = [
       "✨ Skin Care",
-      "💇 Hair Care",
-      "🧴 Body Care",
-      "💧 Hydration AI",
-      "🥗 Healthy Food",
-      "😴 Better Sleep",
+      "💇 Perawatan Rambut",
+      "🧴 Perawatan Tubuh",
+      "💧 Asisten Minum Air",
+      "🥗 Makanan Sehat",
+      "😴 Tidur Lebih Baik",
       "🧘 Self Care"
     ];
 
@@ -4310,7 +4709,7 @@
       toast.timer = window.setTimeout(() => el.classList.remove("show"), 2400);
     }
 
-    function setButtonLoading(selector, isLoading, loadingText = "Saving...") {
+    function setButtonLoading(selector, isLoading, loadingText = "Memuat...") {
       const button = $(selector);
       if (!button) return;
       if (isLoading) {
@@ -4327,7 +4726,7 @@
     }
 
     function t(key) {
-      return (i18n[state.language] && i18n[state.language][key]) || i18n.id[key] || key;
+      return i18n.id[key] || key;
     }
 
     function scrollToTop(smooth = true) {
@@ -4377,7 +4776,7 @@
       $("#profileEditStreak").textContent = `${profile.streak || 0} hari`;
       $("#profileJoinedText").textContent = formatDate(profile.joinedAt);
       $("#profileWaterTargetText").textContent = `${profile.waterTarget || 8} gelas`;
-      $("#streakText").textContent = `${profile.streak || 0} hari konsisten`;
+      if ($("#streakText")) $("#streakText").textContent = `${profile.streak || 0} hari konsisten`;
       $("#dailyNote").value = profile.note || "";
       $("#usernameInput").value = user.username;
       $("#morningReminderInput").value = profile.reminders.morning;
@@ -4406,7 +4805,7 @@
 
     function applyRoutineStartedState() {
       if (currentUser().profile.routineStarted?.[todayKey()]) {
-        const label = state.language === "id" ? "✅ Rutinitas Dimulai" : "✅ Routine Started";
+        const label = "✅ Rutinitas Dimulai";
         $("#quickRoutineBtn").textContent = label;
         $("#heroStartBtn").textContent = label;
       }
@@ -4493,7 +4892,7 @@
       renderApp();
       if (clamped >= target && !wasComplete && celebrate) {
         showSparkles();
-        toast("💧 Hydration completed");
+        toast("💧 Target minum air selesai");
       } else {
         showSparkles();
         toast(state.language === "id" ? `💧 Minum air diperbarui: ${clamped}/${target} gelas.` : `💧 Water updated: ${clamped}/${target} glasses.`);
@@ -4851,16 +5250,16 @@
 
     function startFaceScan() {
       window.clearInterval(faceScanTimer);
-      setButtonLoading("#startFaceScanBtn", true, "Scanning...");
+      setButtonLoading("#startFaceScanBtn", true, "Memindai...");
       $("#faceScanStage").classList.add("scanning");
       $("#faceScanResultPanel").classList.add("hidden");
       let progress = 0;
       $("#faceScanProgressFill").style.width = "0%";
-      $("#faceScanStatus").textContent = "Scanning Face... 0%";
+      $("#faceScanStatus").textContent = "Memindai wajah... 0%";
       faceScanTimer = window.setInterval(() => {
         progress = Math.min(100, progress + Math.floor(Math.random() * 9) + 5);
         $("#faceScanProgressFill").style.width = `${progress}%`;
-        $("#faceScanStatus").textContent = `Scanning Face... ${progress}%`;
+        $("#faceScanStatus").textContent = `Memindai wajah... ${progress}%`;
         if (progress >= 100) {
           window.clearInterval(faceScanTimer);
           completeFaceScan();
@@ -4876,7 +5275,7 @@
       saveState();
       $("#faceScanStage").classList.remove("scanning");
       setButtonLoading("#startFaceScanBtn", false);
-      $("#faceScanStatus").textContent = "AI analysis complete. Results saved to Home Dashboard.";
+      $("#faceScanStatus").textContent = "Analisis AI selesai. Hasil tersimpan ke Beranda.";
       if (result.photo) {
         $("#faceScanPreview").src = result.photo;
         $("#faceScanPreview").style.transform = "none";
@@ -4887,7 +5286,7 @@
       renderFaceScanResult(result);
       renderApp();
       showConfetti();
-      toast("🤖 AI Scan completed");
+      toast("🤖 Pemindaian AI selesai");
     }
 
     function renderFaceScanResult(result) {
@@ -5063,10 +5462,8 @@
       $("#faceProgressNumber").textContent = `${stats.percent}%`;
       $("#faceProgressStat").textContent = `${stats.percent}%`;
       $("#faceRoutineStat").textContent = `${stats.done}/${stats.total}`;
-      $("#faceStreakStat").textContent = `${currentUser().profile.streak || 0} Days`;
-      $("#faceProgressCopy").textContent = state.language === "id"
-        ? (stats.percent === 100 ? "Semua rutinitas Face Care selesai hari ini." : `${stats.total - stats.done} langkah lagi untuk hari ini.`)
-        : (stats.percent === 100 ? "All face care routines completed." : `${stats.total - stats.done} steps left for today.`);
+      $("#faceStreakStat").textContent = `${currentUser().profile.streak || 0} Hari`;
+      $("#faceProgressCopy").textContent = stats.percent === 100 ? "Semua rutinitas perawatan wajah selesai hari ini." : `${stats.total - stats.done} langkah lagi untuk hari ini.`;
       const weeklyFace = weeklyFaceProgress();
       $("#faceAiSkinTip").textContent = stats.percent >= 70
         ? "Skin barrier kamu sedang mendapat dukungan dari rutinitas yang konsisten. Pertahankan sunscreen dan hidrasi."
@@ -5074,7 +5471,7 @@
       $("#faceBeforeScore").textContent = `${Math.max(0, stats.percent - 28)}%`;
       $("#faceAfterScore").textContent = `${stats.percent}%`;
       $("#faceWeeklyFill").style.width = `${weeklyFace}%`;
-      $("#faceWeeklyCopy").textContent = `${weeklyFace}% weekly consistency.`;
+      $("#faceWeeklyCopy").textContent = `${weeklyFace}% konsistensi mingguan.`;
       const products = currentFaceCare().products[todayKey()] || [];
       const mood = currentFaceCare().skinMood[todayKey()] || "Belum dipilih";
       $("#faceSkinJournal").textContent = `Mood: ${mood}. Produk hari ini: ${products.length ? products.map((item) => item.name).join(", ") : "belum ada produk tersimpan"}.`;
@@ -5090,7 +5487,7 @@
       if (nextStats.percent === 100 && previous !== 100) {
         currentUser().profile.streak = Math.max(currentUser().profile.streak || 0, 1);
         showConfetti();
-        toast("🎉 Routine completed");
+        toast("🎉 Rutinitas berhasil diselesaikan");
       } else {
         toast(faceCare.routines[todayKey()][tab][item] ? "Face care step selesai." : "Face care step dikembalikan.");
       }
@@ -5204,7 +5601,7 @@
         saveState();
         renderApp();
         showSparkles();
-        toast("Saved Successfully ✨");
+        toast("Berhasil disimpan ✨");
       }));
 
       $("#bodyCareStat").textContent = `${stats.taskDone}/${bodyTasks.length}`;
@@ -5212,9 +5609,7 @@
       $("#bodyProgressStat").textContent = `${stats.percent}%`;
       $("#bodyProgressNumber").textContent = `${stats.percent}%`;
       $("#bodyProgressRing").style.setProperty("--value", stats.percent);
-      $("#bodyProgressCopy").textContent = state.language === "id"
-        ? (stats.percent === 100 ? "Body Care selesai untuk hari ini." : `${stats.total - stats.done} aktivitas ringan tersisa.`)
-        : (stats.percent === 100 ? "Body care complete for today." : `${stats.total - stats.done} gentle actions left.`);
+      $("#bodyProgressCopy").textContent = stats.percent === 100 ? "Perawatan tubuh selesai untuk hari ini." : `${stats.total - stats.done} aktivitas ringan tersisa.`;
       const target = Number(currentUser().profile.waterTarget) || 8;
       const water = getWaterCount();
       const waterPercent = Math.min(100, Math.round((water / target) * 100));
@@ -5223,14 +5618,14 @@
       $("#bodyWaterPercent").textContent = `${waterPercent}%`;
       const weeklyBody = weeklyBodyProgress();
       $("#bodyWeeklyFill").style.width = `${weeklyBody}%`;
-      $("#bodyWeeklyCopy").textContent = `${weeklyBody}% weekly progress.`;
+      $("#bodyWeeklyCopy").textContent = `${weeklyBody}% progress mingguan.`;
       $("#bodyActivityFill").style.width = `${weeklyBody}%`;
-      $("#bodyActivityCopy").textContent = `${weeklyBody}% activity completed this week.`;
+      $("#bodyActivityCopy").textContent = `${weeklyBody}% aktivitas selesai minggu ini.`;
       $("#bodyStepsText").textContent = `${(3200 + (stats.done * 420)).toLocaleString("id-ID")}`;
       $("#bodyCaloriesText").textContent = `${90 + (stats.done * 18)} kcal`;
       $("#bodyQuote").textContent = `"${bodyQuotes[dayOfYear(new Date()) % bodyQuotes.length]}"`;
       $("#bodyAiRecommendation").textContent = stats.percent >= 70
-        ? `"Body Care kamu sudah stabil hari ini. Tambahkan stretching ringan dan jaga hidrasi agar tubuh tetap fresh."`
+        ? `"Perawatan tubuh kamu sudah stabil hari ini. Tambahkan stretching ringan dan jaga minum air agar tubuh tetap fresh."`
         : `"Mulai dari satu aktivitas kecil: body lotion, stretching 5 menit, atau tambah satu gelas air."`;
       renderPilatesTimer();
       renderIcons($("#bodycare"));
@@ -5251,7 +5646,7 @@
       saveState();
       renderApp();
       showSparkles();
-      toast("Saved Successfully ✨");
+      toast("Berhasil disimpan ✨");
     }
 
     function renderPilatesTimer() {
@@ -5330,11 +5725,9 @@
       $("#hairProgressStat").textContent = `${stats.percent}%`;
       $("#hairScoreStat").textContent = String(Math.max(1, Math.round(stats.percent / 10)));
       $("#hairWeeklyStat").textContent = `${weeklyHairProgress()}%`;
-      $("#hairProgressCopy").textContent = state.language === "id"
-        ? (stats.percent === 100 ? "Rutinitas rambut selesai hari ini." : `${stats.total - stats.done} langkah hair care tersisa.`)
-        : (stats.percent === 100 ? "Hair routine completed today." : `${stats.total - stats.done} hair steps left.`);
+      $("#hairProgressCopy").textContent = stats.percent === 100 ? "Rutinitas rambut selesai hari ini." : `${stats.total - stats.done} langkah perawatan rambut tersisa.`;
       $("#hairMainProgressFill").style.width = `${stats.percent}%`;
-      $("#hairMainProgressCopy").textContent = `${stats.percent}% hair routine completed.`;
+      $("#hairMainProgressCopy").textContent = `${stats.percent}% rutinitas rambut selesai.`;
       $("#weeklyHairRoutineList").innerHTML = ["Hair Mask", "Hair Oil", "Scalp Massage", "Hair Vitamin"].map((item) => `
         <button class="weekly-item ${hairCare.tasks[todayKey()][item] ? "done" : ""}" data-hair-task="${item}" type="button">
           <span class="face-checkmark">${hairCare.tasks[todayKey()][item] ? "✓" : ""}</span>
@@ -5660,7 +6053,7 @@
         <article class="note-card" data-note-card="${note.id}">
           <button class="link-button note-card-header" data-open-note="${note.id}" type="button">
             <div class="note-meta">
-              ${note.pinned ? `<span class="note-chip pinned">⭐ Pinned</span>` : ""}
+              ${note.pinned ? `<span class="note-chip pinned">⭐ Disematkan</span>` : ""}
               <span class="note-chip">${escapeHtml(note.category)}</span>
               <span class="note-chip">${escapeHtml(note.mood)}</span>
             </div>
@@ -5675,7 +6068,7 @@
             <div class="note-actions" style="margin-top:12px;">
               <button class="note-action" data-pin-note="${note.id}" type="button">📌 ${note.pinned ? "Unpin" : "Pin"}</button>
               <button class="note-action" data-edit-note="${note.id}" type="button">✏ Edit</button>
-              <button class="note-action" data-delete-note="${note.id}" type="button">🗑 Delete</button>
+              <button class="note-action" data-delete-note="${note.id}" type="button">🗑 Hapus</button>
             </div>
           </div>
         </article>
@@ -5699,11 +6092,11 @@
 
     function openNoteModal(id = "") {
       const note = id ? noteById(id) : null;
-      $("#noteModalTitle").textContent = note ? "Edit Note" : "New Note";
+      $("#noteModalTitle").textContent = note ? "Edit Catatan" : "Catatan Baru";
       $("#noteIdInput").value = note?.id || "";
       $("#noteTitleInput").value = note?.title || "";
-      $("#noteCategoryInput").value = note?.category || "🌸 Face Care";
-      $("#noteMoodInput").value = note?.mood || "😊 Happy";
+      $("#noteCategoryInput").value = note?.category || "🌸 Perawatan Wajah";
+      $("#noteMoodInput").value = note?.mood || "😊 Senang";
       $("#noteBodyInput").value = note?.body || "";
       $("#noteModalOverlay").classList.add("show");
       $("#noteModalOverlay").setAttribute("aria-hidden", "false");
@@ -5724,7 +6117,7 @@
         $("#noteTitleInput").focus();
         return;
       }
-      setButtonLoading("#saveNoteSubmitBtn", true, "Saving...");
+      setButtonLoading("#saveNoteSubmitBtn", true, "Menyimpan...");
       const notes = currentNotes();
       const id = $("#noteIdInput").value;
       const now = new Date().toISOString();
@@ -5751,7 +6144,7 @@
       renderApp();
       showSparkles();
       window.setTimeout(() => setButtonLoading("#saveNoteSubmitBtn", false), 250);
-      toast("🌸 Note saved");
+      toast("🌸 Catatan tersimpan");
     }
 
     function openNoteDetail(id) {
@@ -5761,7 +6154,7 @@
       $("#noteDetailCategory").textContent = note.category;
       $("#noteDetailTitle").textContent = `📖 ${note.title}`;
       $("#noteDetailMeta").innerHTML = `
-        ${note.pinned ? `<span class="note-chip pinned">⭐ Pinned</span>` : ""}
+        ${note.pinned ? `<span class="note-chip pinned">⭐ Disematkan</span>` : ""}
         <span class="note-chip">${escapeHtml(note.mood)}</span>
         <span class="note-chip">🗓 ${formatDate(note.createdAt)}</span>
         <span class="note-chip">🕒 ${formatTime(note.createdAt)}</span>
@@ -5812,7 +6205,7 @@
         saveState();
         closeDeleteNoteDialog();
         renderApp();
-        toast("🗑 Note berhasil dihapus.");
+        toast("🗑 Catatan berhasil dihapus.");
       }, 220);
     }
 
@@ -5903,13 +6296,13 @@
     function applyLanguage() {
       $("#quickRoutineBtn").textContent = t("quickRoutine");
       const navLabels = {
-        dashboard: "Home",
+        dashboard: "Beranda",
         routines: t("faceCare"),
         bodycare: t("bodyCare"),
         haircare: t("hairCare"),
         achievement: t("achievement"),
         assistant: t("assistant"),
-        notes: "Notes"
+        notes: "Catatan"
       };
       $$(".nav-btn[data-view]").forEach((button) => {
         const icon = button.querySelector(".nav-icon");
@@ -5920,13 +6313,13 @@
       const logoutIcon = $("#sidebarLogoutBtn .nav-icon");
       $("#sidebarLogoutBtn").innerHTML = "";
       if (logoutIcon) $("#sidebarLogoutBtn").appendChild(logoutIcon);
-      $("#sidebarLogoutBtn").append(document.createTextNode("Logout"));
+      $("#sidebarLogoutBtn").append(document.createTextNode("Keluar"));
       renderIcons($("#sidebar"));
       translateStaticText();
     }
 
     function translateStaticText() {
-      const map = phraseI18n[state.language] || {};
+      const map = phraseI18n.id || {};
       const walker = document.createTreeWalker($("#appShell"), NodeFilter.SHOW_TEXT);
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -5954,7 +6347,7 @@
         haircare: [t("hairCare"), t("hairTitle")],
         achievement: [t("achievement"), t("achievementTitle")],
         assistant: [t("assistant"), t("assistantTitle")],
-        notes: ["My Notes", "My skincare & wellness journal."],
+        notes: ["Catatan", "Jurnal skincare dan wellness pribadimu."],
         recommendations: [t("recommendations"), t("recommendationsTitle")],
         profile: [t("profile"), t("profileTitle")],
         settings: [t("settings"), t("settingsTitle")]
@@ -5967,21 +6360,29 @@
     }
 
     function startLogoutExperience() {
-      const user = currentUser();
-      const name = user?.username || "GlowMate";
-      const messages = state.language === "id" ? logoutMessagesId : logoutMessages;
-      $("#logoutTitle").textContent = state.language === "id" ? `🌸 Sampai Jumpa Lagi, ${name}!` : `🌸 See You Again, ${name}!`;
-      $("#logoutQuote").textContent = messages[Math.floor(Math.random() * messages.length)];
-      $("#logoutSummary").innerHTML = logoutSummaryItems().map((item) => `<span>${item}</span>`).join("");
+      $("#logoutTitle").textContent = "Sampai Jumpa! 👋";
+      $("#logoutQuote").innerHTML = "Terima kasih telah menggunakan GlowMate.<br>Semoga rutinitas sehatmu tetap konsisten setiap hari.<br>Sampai bertemu lagi! 🌸";
+      $("#logoutSummary").innerHTML = `
+        <span class="logout-divider">━━━━━━━━━━━━━━━━━━</span>
+        <strong>GlowMate v1.0</strong>
+        <span>Dibuat oleh Mahera Putri Aminarti</span>
+        <span>GitHub: raraajasii4-ux</span>
+        <span>© 2026 GlowMate</span>
+        <span class="logout-divider">━━━━━━━━━━━━━━━━━━</span>
+      `;
+      $("#logoutScreen").classList.remove("hiding");
       $("#logoutScreen").classList.add("show");
       window.setTimeout(() => {
-        state.session = null;
-        state.activeView = "dashboard";
-        saveState();
-        renderShell();
-        $("#logoutScreen").classList.remove("show");
-        toast(state.language === "id" ? "Sampai jumpa lagi!" : "See you again!");
-      }, 2700);
+        $("#logoutScreen").classList.add("hiding");
+        window.setTimeout(() => {
+          state.session = null;
+          state.activeView = "dashboard";
+          saveState();
+          renderShell();
+          $("#logoutScreen").classList.remove("show", "hiding");
+          toast("Sampai jumpa lagi!");
+        }, 420);
+      }, 2400);
     }
 
     function logoutSummaryItems() {
@@ -5992,24 +6393,13 @@
       const target = currentUser().profile.waterTarget || 8;
       const sleep = currentUser().profile.sleepTarget || "8 Hours";
       const glowScore = Math.round((completionStats().percent + faceStats().percent + bodyStats().percent + hairStats().percent) / 4);
-      if (state.language === "id") {
-        return [
-          "🌸 Perjalanan Hari Ini",
-          `${faceDone ? "✅" : "○"} Face Care ${faceDone ? "Selesai" : "Berjalan"}`,
-          `${bodyDone ? "✅" : "○"} Body Care ${bodyDone ? "Selesai" : "Berjalan"}`,
-          `${hairDone ? "✅" : "○"} Hair Care ${hairDone ? "Selesai" : "Berjalan"}`,
-          `💧 Minum Air: ${water}/${target} gelas`,
-          `😴 Target Tidur: ${sleep}`,
-          `⭐ Glow Score: ${glowScore}/100`
-        ];
-      }
       return [
-        "🌸 Today's Journey",
-        `${faceDone ? "✅" : "○"} Face Care ${faceDone ? "Completed" : "In Progress"}`,
-        `${bodyDone ? "✅" : "○"} Body Care ${bodyDone ? "Completed" : "In Progress"}`,
-        `${hairDone ? "✅" : "○"} Hair Care ${hairDone ? "Completed" : "In Progress"}`,
-        `💧 Water: ${water}/${target} Glasses`,
-        `😴 Sleep Goal: ${sleep}`,
+        "🌸 Perjalanan Hari Ini",
+        `${faceDone ? "✅" : "○"} Perawatan Wajah ${faceDone ? "Selesai" : "Berjalan"}`,
+        `${bodyDone ? "✅" : "○"} Perawatan Tubuh ${bodyDone ? "Selesai" : "Berjalan"}`,
+        `${hairDone ? "✅" : "○"} Perawatan Rambut ${hairDone ? "Selesai" : "Berjalan"}`,
+        `💧 Minum Air: ${water}/${target} gelas`,
+        `😴 Target Tidur: ${sleep}`,
         `⭐ Glow Score: ${glowScore}/100`
       ];
     }
@@ -6045,13 +6435,13 @@
       const profile = currentUser().profile;
       profile.routineStarted ||= {};
       profile.routineStarted[todayKey()] = true;
-      const startedLabel = state.language === "id" ? "✅ Rutinitas Dimulai" : "✅ Routine Started";
+      const startedLabel = "✅ Rutinitas Dimulai";
       $("#quickRoutineBtn").classList.add("loading");
       $("#quickRoutineBtn").textContent = startedLabel;
       $("#heroStartBtn").classList.add("loading");
       $("#heroStartBtn").textContent = startedLabel;
       showSparkles();
-      toast(state.language === "id" ? "🌸 Rutinitas berhasil dimulai! Progress hari ini telah disimpan." : "🌸 Routine started! Today's progress has been saved.");
+      toast("🌸 Rutinitas berhasil dimulai! Progres hari ini telah disimpan.");
       window.setTimeout(() => {
         $("#quickRoutineBtn").classList.remove("loading");
         $("#heroStartBtn").classList.remove("loading");
@@ -6113,7 +6503,7 @@
       state.language = event.target.value;
       saveState();
       renderApp();
-      toast(state.language === "id" ? "Bahasa diperbarui." : "Language updated.");
+      toast("Bahasa berhasil diperbarui.");
     });
     $("#aiChatForm").addEventListener("submit", (event) => {
       event.preventDefault();
@@ -6172,11 +6562,11 @@
     $("#waterPlusBtn").addEventListener("click", () => setWaterCount(getWaterCount() + 1));
     $("#bodyWaterMinusBtn").addEventListener("click", () => {
       setWaterCount(getWaterCount() - 1, false);
-      toast("Saved Successfully ✨");
+      toast("Berhasil disimpan ✨");
     });
     $("#bodyWaterPlusBtn").addEventListener("click", () => {
       setWaterCount(getWaterCount() + 1);
-      toast("Saved Successfully ✨");
+      toast("Berhasil disimpan ✨");
     });
     $("#resetDayBtn").addEventListener("click", () => {
       currentUser().profile.completed[todayKey()] = {};
@@ -6196,7 +6586,7 @@
       saveState();
       renderApp();
       showConfetti();
-      toast("🎉 Routine completed");
+      toast("🎉 Rutinitas berhasil diselesaikan");
     });
     $("#productForm").addEventListener("submit", (event) => {
       event.preventDefault();
@@ -6247,7 +6637,7 @@
       saveState();
       renderApp();
       showSparkles();
-      toast("Saved Successfully ✨");
+      toast("Berhasil disimpan ✨");
     });
     $("#pilatesMinusBtn").addEventListener("click", () => {
       currentBodyCare().timerSeconds = Math.max(60, currentBodyCare().timerSeconds - 60);
@@ -6287,7 +6677,7 @@
     });
     $("#profileForm").addEventListener("submit", (event) => {
       event.preventDefault();
-      setButtonLoading("#saveProfileBtn", true, "Saving...");
+      setButtonLoading("#saveProfileBtn", true, "Menyimpan...");
       const user = currentUser();
       const nextUsername = $("#displayNameInput").value.trim();
       if (!nextUsername) {
@@ -6324,7 +6714,7 @@
       saveState();
       renderApp();
       setButtonLoading("#saveProfileBtn", false);
-      toast("✨ Profile updated successfully");
+      toast("✨ Profil berhasil diperbarui");
       window.setTimeout(() => setActiveView("dashboard"), 1000);
     });
     $("#accountForm").addEventListener("submit", (event) => {
